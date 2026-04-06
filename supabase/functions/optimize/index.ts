@@ -200,7 +200,7 @@ serve(async (req: Request) => {
   try {
     body = await req.json();
   } catch {
-    return errorResponse("Invalid JSON body.", 400);
+    return errorResponse("Body inválido: JSON esperado com { jsonRender, suggestions }.", 400);
   }
 
   const jsonRender = body?.jsonRender;
@@ -214,14 +214,14 @@ serve(async (req: Request) => {
     Array.isArray(jsonRender.elements)
   ) {
     return errorResponse(
-      'Missing or invalid jsonRender. Required fields: root (string), elements (object).',
+      "Dados jsonRender ausentes ou inválidos. Campos obrigatórios: root (string), elements (object).",
       400,
     );
   }
 
   if (!suggestions || !Array.isArray(suggestions) || suggestions.length === 0) {
     return errorResponse(
-      "Missing or empty suggestions array. At least one suggestion is required.",
+      "Array de sugestões ausente ou vazio. Pelo menos uma sugestão é obrigatória.",
       400,
     );
   }
@@ -230,12 +230,15 @@ serve(async (req: Request) => {
   let resolvedProvider;
   try {
     resolvedProvider = resolveProvider(req.headers);
-  } catch (err) {
-    return errorResponse((err as Error).message, 400);
+  } catch {
+    return errorResponse("Nenhum provider de IA disponível. Configure uma API key.", 400);
   }
 
   // --- 3. Build prompts & call LLM ----------------------------------------
   const userPrompt = buildUserPrompt(jsonRender, suggestions);
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 60_000);
 
   let llmResponse;
   try {
@@ -245,34 +248,54 @@ serve(async (req: Request) => {
       userPrompt,
       jsonMode: true,
       maxTokens: 8192,
+      signal: controller.signal,
     });
   } catch (err) {
+    clearTimeout(timeout);
+    if (err instanceof DOMException && err.name === "AbortError") {
+      return errorResponse("Tempo limite excedido. O site pode ser muito grande ou lento.", 504);
+    }
     console.error("LLM call failed:", err);
-    return errorResponse(`LLM error: ${(err as Error).message}`, 502);
+    return errorResponse("Erro na análise da IA. Tente novamente.", 502);
+  } finally {
+    clearTimeout(timeout);
   }
 
   // --- 4. Parse & validate response ----------------------------------------
   let parsed: { root?: string; elements?: Record<string, unknown> };
   try {
     parsed = JSON.parse(llmResponse.content);
-  } catch (err) {
+  } catch {
+    // Try to extract partial JSON if the response was truncated
     console.error("Failed to parse LLM JSON:", llmResponse.content.slice(0, 500));
+    const partialMatch = llmResponse.content.match(/\{[\s\S]*\}/);
+    if (partialMatch) {
+      try {
+        parsed = JSON.parse(partialMatch[0]);
+      } catch {
+        return errorResponse(
+          "A resposta da IA foi truncada. Tente novamente ou use um modelo com mais capacidade.",
+          502,
+        );
+      }
+    } else {
+      return errorResponse(
+        "A resposta da IA foi truncada. Tente novamente ou use um modelo com mais capacidade.",
+        502,
+      );
+    }
+  }
+
+  if (!parsed!.root || typeof parsed!.root !== "string") {
     return errorResponse(
-      `Failed to parse LLM response as JSON: ${(err as Error).message}`,
+      "Erro na otimização da IA: campo 'root' ausente ou inválido na resposta.",
       500,
     );
   }
 
-  if (!parsed.root || typeof parsed.root !== "string") {
+  if (!parsed!.elements || typeof parsed!.elements !== "object" || Array.isArray(parsed!.elements)) {
     return errorResponse(
-      'Invalid json-render output: missing or invalid "root" key.',
-      500,
-    );
-  }
-
-  if (!parsed.elements || typeof parsed.elements !== "object" || Array.isArray(parsed.elements)) {
-    return errorResponse(
-      'Invalid json-render output: missing or invalid "elements" object.',
+      "Erro na otimização da IA: campo 'elements' ausente ou inválido na resposta.",
       500,
     );
   }

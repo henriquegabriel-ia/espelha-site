@@ -72,7 +72,7 @@ serve(async (req: Request) => {
     // 1. Validate request method and body
     if (req.method !== "POST") {
       return new Response(
-        JSON.stringify({ error: "Method not allowed. Use POST." }),
+        JSON.stringify({ error: "Método não permitido. Use POST." }),
         { status: 400, headers: jsonHeaders },
       );
     }
@@ -82,7 +82,7 @@ serve(async (req: Request) => {
       body = await req.json();
     } catch {
       return new Response(
-        JSON.stringify({ error: "Invalid JSON body." }),
+        JSON.stringify({ error: "Body inválido: JSON esperado com { jsonRender, originalUrl }." }),
         { status: 400, headers: jsonHeaders },
       );
     }
@@ -91,14 +91,14 @@ serve(async (req: Request) => {
 
     if (!jsonRender || typeof jsonRender !== "object") {
       return new Response(
-        JSON.stringify({ error: "Missing or invalid 'jsonRender' in request body." }),
+        JSON.stringify({ error: "Campo 'jsonRender' ausente ou inválido no body." }),
         { status: 400, headers: jsonHeaders },
       );
     }
 
     if (!originalUrl || typeof originalUrl !== "string") {
       return new Response(
-        JSON.stringify({ error: "Missing or invalid 'originalUrl' in request body." }),
+        JSON.stringify({ error: "Campo 'originalUrl' ausente ou inválido no body." }),
         { status: 400, headers: jsonHeaders },
       );
     }
@@ -107,10 +107,9 @@ serve(async (req: Request) => {
     let provider;
     try {
       provider = resolveProvider(req.headers);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to resolve AI provider.";
+    } catch {
       return new Response(
-        JSON.stringify({ error: message }),
+        JSON.stringify({ error: "Nenhum provider de IA disponível. Configure uma API key." }),
         { status: 400, headers: jsonHeaders },
       );
     }
@@ -118,7 +117,10 @@ serve(async (req: Request) => {
     // 3. Build user prompt
     const userPrompt = `URL original: ${originalUrl}\n\nJSON do site:\n${JSON.stringify(jsonRender)}`;
 
-    // 4. Call LLM
+    // 4. Call LLM with timeout
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 60_000);
+
     let llmResponse;
     try {
       llmResponse = await callLLM({
@@ -127,13 +129,23 @@ serve(async (req: Request) => {
         userPrompt,
         jsonMode: true,
         maxTokens: 4096,
+        signal: controller.signal,
       });
     } catch (err) {
-      const message = err instanceof Error ? err.message : "LLM call failed.";
+      clearTimeout(timeout);
+      if (err instanceof DOMException && err.name === "AbortError") {
+        return new Response(
+          JSON.stringify({ error: "Tempo limite excedido. O site pode ser muito grande ou lento." }),
+          { status: 504, headers: jsonHeaders },
+        );
+      }
+      console.error("LLM call failed:", err);
       return new Response(
-        JSON.stringify({ error: `AI provider error: ${message}` }),
+        JSON.stringify({ error: "Erro na análise da IA. Tente novamente." }),
         { status: 502, headers: jsonHeaders },
       );
+    } finally {
+      clearTimeout(timeout);
     }
 
     // 5. Parse and validate response
@@ -141,17 +153,29 @@ serve(async (req: Request) => {
     try {
       report = JSON.parse(llmResponse.content);
     } catch {
-      return new Response(
-        JSON.stringify({ error: "AI returned invalid JSON.", raw: llmResponse.content }),
-        { status: 502, headers: jsonHeaders },
-      );
+      // Try to extract partial JSON if the response was truncated
+      const partialMatch = llmResponse.content.match(/\{[\s\S]*\}/);
+      if (partialMatch) {
+        try {
+          report = JSON.parse(partialMatch[0]);
+        } catch {
+          return new Response(
+            JSON.stringify({ error: "A resposta da IA foi truncada. Tente novamente ou use um modelo com mais capacidade." }),
+            { status: 502, headers: jsonHeaders },
+          );
+        }
+      } else {
+        return new Response(
+          JSON.stringify({ error: "A resposta da IA foi truncada. Tente novamente ou use um modelo com mais capacidade." }),
+          { status: 502, headers: jsonHeaders },
+        );
+      }
     }
 
     if (!validateReport(report)) {
       return new Response(
         JSON.stringify({
-          error: "AI response does not match expected schema (positives, negatives, suggestions).",
-          raw: report,
+          error: "A resposta da IA não corresponde ao formato esperado (positives, negatives, suggestions). Tente novamente.",
         }),
         { status: 502, headers: jsonHeaders },
       );
@@ -170,7 +194,8 @@ serve(async (req: Request) => {
       { status: 200, headers: jsonHeaders },
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Internal server error.";
+    console.error("Unhandled error in /analyze:", error);
+    const message = error instanceof Error ? error.message : "Erro interno desconhecido.";
     return new Response(
       JSON.stringify({ error: message }),
       { status: 500, headers: jsonHeaders },

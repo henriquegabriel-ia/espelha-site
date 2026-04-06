@@ -52,13 +52,13 @@ export function UrlInput({ onSubmit, isLoading, disabled }: UrlInputProps) {
             if (error) setError("");
           }}
           disabled={disabled || isLoading}
-          className="flex-1 h-12 text-base"
+          className="flex-1 h-12 text-base focus-visible:ring-2 focus-visible:ring-blue-500"
         />
         <Button
           type="submit"
           size="lg"
           disabled={disabled || isLoading}
-          className="h-12 px-6"
+          className="h-12 px-6 active:scale-95 transition-transform"
         >
           {isLoading ? (
             <Loader2 className="h-4 w-4 animate-spin" />

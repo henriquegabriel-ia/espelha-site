@@ -32,6 +32,29 @@ interface ScrapedPage {
 
 const JSON_HEADERS = { ...corsHeaders, "Content-Type": "application/json" };
 
+// ---------------------------------------------------------------------------
+// Rate limiting — in-memory, resets per deploy (sufficient for MVP)
+// ---------------------------------------------------------------------------
+const rateLimitMap = new Map<string, number>();
+const RATE_LIMIT_INTERVAL_MS = 3_000;
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const lastRequest = rateLimitMap.get(ip);
+  if (lastRequest && now - lastRequest < RATE_LIMIT_INTERVAL_MS) {
+    return false; // rate limited
+  }
+  rateLimitMap.set(ip, now);
+  // Cleanup old entries periodically to avoid memory leak
+  if (rateLimitMap.size > 10_000) {
+    const cutoff = now - RATE_LIMIT_INTERVAL_MS;
+    for (const [key, ts] of rateLimitMap) {
+      if (ts < cutoff) rateLimitMap.delete(key);
+    }
+  }
+  return true;
+}
+
 function validateUrl(raw: string): { valid: boolean; error?: string } {
   let parsed: URL;
   try {
@@ -111,6 +134,17 @@ serve(async (req: Request) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  // Rate limit check
+  const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+    || req.headers.get("x-real-ip")
+    || "unknown";
+  if (!checkRateLimit(clientIp)) {
+    return new Response(
+      JSON.stringify({ error: "Muitas requisições. Aguarde alguns segundos e tente novamente." }),
+      { status: 429, headers: JSON_HEADERS },
+    );
+  }
+
   const startTime = performance.now();
 
   try {
@@ -149,6 +183,9 @@ serve(async (req: Request) => {
       );
     }
 
+    // Normalize URL — encode special characters properly
+    const normalizedUrl = new URL(body.url).href;
+
     // Get API key
     const apiKey = Deno.env.get("FIRECRAWL_API_KEY");
     if (!apiKey) {
@@ -171,7 +208,7 @@ serve(async (req: Request) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          url: body.url,
+          url: normalizedUrl,
           formats: ["markdown", "html"],
         }),
         signal: controller.signal,
@@ -180,12 +217,12 @@ serve(async (req: Request) => {
       clearTimeout(timeout);
       if (err instanceof DOMException && err.name === "AbortError") {
         return new Response(
-          JSON.stringify({ error: "Timeout ao acessar o Firecrawl. Tente novamente." }),
+          JSON.stringify({ error: "Tempo limite excedido. O site pode ser muito grande ou lento." }),
           { status: 504, headers: JSON_HEADERS }
         );
       }
       return new Response(
-        JSON.stringify({ error: "Erro de rede ao conectar com o Firecrawl." }),
+        JSON.stringify({ error: "Não foi possível acessar o site. Verifique se a URL está correta." }),
         { status: 502, headers: JSON_HEADERS }
       );
     } finally {

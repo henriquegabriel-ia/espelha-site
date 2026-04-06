@@ -20,23 +20,23 @@ function highlightJson(json: string): string {
   // Tokenize and wrap in colored spans
   return escaped.replace(
     /("(?:\\.|[^"\\])*")\s*:/g, // keys
-    '<span class="text-purple-400 font-bold">$1</span>:'
+    '<span class="text-purple-600 dark:text-purple-400 font-bold">$1</span>:'
   ).replace(
     /:\s*("(?:\\.|[^"\\])*")/g, // string values
-    ': <span class="text-green-400">$1</span>'
+    ': <span class="text-green-600 dark:text-green-400">$1</span>'
   ).replace(
     // standalone string values in arrays (not after colon on same match)
     /(?<=[[,]\s*)("(?:\\.|[^"\\])*")/g,
-    '<span class="text-green-400">$1</span>'
+    '<span class="text-green-600 dark:text-green-400">$1</span>'
   ).replace(
     /\b(\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\b/g, // numbers
-    '<span class="text-blue-400">$1</span>'
+    '<span class="text-blue-600 dark:text-blue-400">$1</span>'
   ).replace(
     /\b(true|false)\b/g, // booleans
-    '<span class="text-yellow-400">$1</span>'
+    '<span class="text-yellow-600 dark:text-yellow-400">$1</span>'
   ).replace(
     /\bnull\b/g, // null
-    '<span class="text-red-400">null</span>'
+    '<span class="text-red-600 dark:text-red-400">null</span>'
   ).replace(
     /([[\]{}])/g, // brackets/braces
     '<span class="text-muted-foreground">$1</span>'
@@ -49,7 +49,7 @@ function JsonSyntaxView({ data }: { data: Record<string, unknown> }) {
   const lines = highlighted.split("\n");
 
   return (
-    <div className="relative overflow-auto rounded-md border border-zinc-800 bg-zinc-900">
+    <div className="relative overflow-auto rounded-md border border-border bg-zinc-100 dark:bg-zinc-900">
       <pre className="font-mono text-sm leading-6 p-4">
         <code>
           {lines.map((line, i) => (
@@ -84,10 +84,10 @@ function getItemCount(value: unknown): number {
 }
 
 function ValueDisplay({ value }: { value: unknown }) {
-  if (value === null) return <span className="text-red-400">null</span>;
-  if (typeof value === "string") return <span className="text-green-400">"{value}"</span>;
-  if (typeof value === "number") return <span className="text-blue-400">{String(value)}</span>;
-  if (typeof value === "boolean") return <span className="text-yellow-400">{String(value)}</span>;
+  if (value === null) return <span className="text-red-600 dark:text-red-400">null</span>;
+  if (typeof value === "string") return <span className="text-green-600 dark:text-green-400">"{value}"</span>;
+  if (typeof value === "number") return <span className="text-blue-600 dark:text-blue-400">{String(value)}</span>;
+  if (typeof value === "boolean") return <span className="text-yellow-600 dark:text-yellow-400">{String(value)}</span>;
   return null;
 }
 
@@ -128,7 +128,7 @@ function TreeNode({ label, value, defaultExpanded = false, expandAll }: TreeNode
       <button
         type="button"
         onClick={() => setExpanded((prev) => !prev)}
-        className="flex items-center gap-1 py-0.5 hover:bg-zinc-800/50 rounded w-full text-left"
+        className="flex items-center gap-1 py-0.5 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 rounded w-full text-left"
       >
         {isOpen ? (
           <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -143,7 +143,7 @@ function TreeNode({ label, value, defaultExpanded = false, expandAll }: TreeNode
         )}
       </button>
       {isOpen && (
-        <div className="pl-4 border-l border-zinc-800 ml-2">
+        <div className="pl-4 border-l border-border ml-2">
           {entries.map(([key, val]) => (
             <TreeNode
               key={key}
@@ -168,19 +168,19 @@ function JsonTreeView({ data }: { data: Record<string, unknown> }) {
   const entries = Object.entries(data);
 
   return (
-    <div className="rounded-md border border-zinc-800 bg-zinc-900 p-4 font-mono text-sm overflow-auto">
+    <div className="rounded-md border border-border bg-zinc-100 dark:bg-zinc-900 p-4 font-mono text-sm overflow-auto">
       <div className="flex gap-2 mb-3">
         <button
           type="button"
           onClick={() => { handleExpandAll(); }}
-          className="text-xs px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-foreground transition-colors"
+          className="text-xs px-2 py-1 rounded bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-foreground transition-colors"
         >
           Expandir tudo
         </button>
         <button
           type="button"
           onClick={() => { handleCollapseAll(); }}
-          className="text-xs px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-foreground transition-colors"
+          className="text-xs px-2 py-1 rounded bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-foreground transition-colors"
         >
           Colapsar tudo
         </button>
@@ -188,7 +188,7 @@ function JsonTreeView({ data }: { data: Record<string, unknown> }) {
           <button
             type="button"
             onClick={() => { handleReset(); }}
-            className="text-xs px-2 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-muted-foreground transition-colors"
+            className="text-xs px-2 py-1 rounded bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-muted-foreground transition-colors"
           >
             Reset
           </button>
@@ -213,7 +213,7 @@ function JsonTreeView({ data }: { data: Record<string, unknown> }) {
 
 function JsonViewerSkeleton() {
   return (
-    <div className="space-y-2 p-4 rounded-md border border-zinc-800 bg-zinc-900">
+    <div className="space-y-2 p-4 rounded-md border border-border bg-zinc-100 dark:bg-zinc-900">
       <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-4 w-1/2" />
       <Skeleton className="h-4 w-5/6" />
@@ -239,7 +239,7 @@ export function JsonViewer({ data, isLoading }: JsonViewerProps) {
 
   if (data === null) {
     return (
-      <div className="flex items-center justify-center rounded-md border border-zinc-800 bg-zinc-900 p-12">
+      <div className="flex items-center justify-center rounded-md border border-border bg-zinc-100 dark:bg-zinc-900 p-12">
         <p className="text-muted-foreground">Nenhum JSON para exibir</p>
       </div>
     );
@@ -247,9 +247,9 @@ export function JsonViewer({ data, isLoading }: JsonViewerProps) {
 
   return (
     <Tabs defaultValue="json" className="w-full">
-      <TabsList>
-        <TabsTrigger value="json">JSON</TabsTrigger>
-        <TabsTrigger value="tree">Tree</TabsTrigger>
+      <TabsList className="w-full sm:w-auto">
+        <TabsTrigger value="json" className="flex-1 sm:flex-initial">JSON</TabsTrigger>
+        <TabsTrigger value="tree" className="flex-1 sm:flex-initial">Tree</TabsTrigger>
       </TabsList>
       <TabsContent value="json">
         <JsonSyntaxView data={data} />

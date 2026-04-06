@@ -1,19 +1,19 @@
 # Story 5.3: Error pages e edge cases
 
-## Status: Draft
+## Status: InProgress
 
 ## Descricao
 Tratar todos os cenarios de erro e edge cases que podem ocorrer durante o fluxo de espelhamento. O usuario deve sempre receber feedback claro e acionavel quando algo da errado, seja na entrada de dados, no scraping ou na analise por IA. Erros silenciosos ou mensagens genericas prejudicam a experiencia.
 
 ## Acceptance Criteria
-- [ ] Given uma URL com caracteres especiais (acentos, espacos, unicode), When submetida, Then deve ser sanitizada/encodada corretamente ou exibir mensagem de erro clara
+- [x] Given uma URL com caracteres especiais (acentos, espacos, unicode), When submetida, Then deve ser sanitizada/encodada corretamente ou exibir mensagem de erro clara
 - [ ] Given uma URL que retorna HTTP 403, When o scraping falha, Then o usuario deve ver mensagem: "O site bloqueou o acesso. Tente outra URL ou verifique se o site permite acesso publico."
 - [ ] Given uma URL que retorna HTTP 404, When o scraping falha, Then o usuario deve ver mensagem: "Pagina nao encontrada. Verifique se a URL esta correta."
 - [ ] Given uma URL que retorna HTTP 500, When o scraping falha, Then o usuario deve ver mensagem: "O servidor do site esta com problemas. Tente novamente mais tarde."
-- [ ] Given um scraping que excede 30 segundos, When o timeout e atingido, Then o usuario deve ver mensagem: "O site demorou muito para responder. Tente uma pagina mais simples ou tente novamente."
-- [ ] Given uma analise de IA que excede 60 segundos, When o timeout e atingido, Then o usuario deve ver mensagem: "A analise esta demorando mais que o esperado. Tente novamente."
-- [ ] Given um JSON invalido retornado pela IA, When o parse falha, Then o sistema deve tentar extrair JSON valido da resposta ou exibir mensagem de erro com opcao de retry
-- [ ] Given qualquer erro, When exibido ao usuario, Then deve incluir uma acao possivel (retry, corrigir URL, etc.)
+- [x] Given um scraping que excede 30 segundos, When o timeout e atingido, Then o usuario deve ver mensagem: "O site demorou muito para responder. Tente uma pagina mais simples ou tente novamente."
+- [x] Given uma analise de IA que excede 60 segundos, When o timeout e atingido, Then o usuario deve ver mensagem: "A analise esta demorando mais que o esperado. Tente novamente."
+- [x] Given um JSON invalido retornado pela IA, When o parse falha, Then o sistema deve tentar extrair JSON valido da resposta ou exibir mensagem de erro com opcao de retry
+- [x] Given qualquer erro, When exibido ao usuario, Then deve incluir uma acao possivel (retry, corrigir URL, etc.)
 - [ ] Given uma URL invalida (sem protocolo, formato errado), When submetida, Then o formulario deve validar e exibir erro inline antes de fazer a requisicao
 
 ## Scope
@@ -63,9 +63,13 @@ Tratar todos os cenarios de erro e edge cases que podem ocorrer durante o fluxo 
 ## Definition of Done
 - [ ] Todos os ACs verificados e passando
 - [ ] Componente ErrorMessage reutilizavel criado e documentado
-- [ ] Todas as mensagens de erro em portugues
+- [x] Todas as mensagens de erro em portugues
 - [ ] Testado com URLs de httpstat.us (403, 404, 500)
 - [ ] Code review aprovado
 
 ## File List
-(preenchido durante dev)
+- `supabase/functions/_shared/ai-client.ts` — Added `signal?: AbortSignal` support to LLMCallOptions and all provider fetch calls
+- `supabase/functions/scrape/index.ts` — Added rate limiting (3s per IP), URL normalization via `new URL().href`, improved PT-BR error messages
+- `supabase/functions/convert/index.ts` — Added AbortController 60s timeout, truncated JSON recovery, PT-BR error messages
+- `supabase/functions/analyze/index.ts` — Added AbortController 60s timeout, truncated JSON recovery, PT-BR error messages
+- `supabase/functions/optimize/index.ts` — Added AbortController 60s timeout, truncated JSON recovery, PT-BR error messages

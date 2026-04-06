@@ -186,17 +186,17 @@ function App() {
 
         {/* Results Section */}
         {(hasResults || isLoading) && (
-          <section className="pb-8">
+          <section className="pb-8 animate-fade-in">
             <div className="max-w-4xl mx-auto px-4 space-y-6">
               <h2 className="text-2xl font-bold text-foreground">
                 JSON Render
               </h2>
 
               <Tabs defaultValue="json" className="w-full">
-                <TabsList>
-                  <TabsTrigger value="json">JSON</TabsTrigger>
-                  <TabsTrigger value="tree">Tree</TabsTrigger>
-                  <TabsTrigger value="preview">Preview</TabsTrigger>
+                <TabsList className="w-full sm:w-auto">
+                  <TabsTrigger value="json" className="flex-1 sm:flex-initial">JSON</TabsTrigger>
+                  <TabsTrigger value="tree" className="flex-1 sm:flex-initial">Tree</TabsTrigger>
+                  <TabsTrigger value="preview" className="flex-1 sm:flex-initial">Preview</TabsTrigger>
                 </TabsList>
                 <TabsContent value="json">
                   <JsonViewer
@@ -231,7 +231,7 @@ function App() {
 
         {/* Analysis Section */}
         {(hasAnalysis || step === "analyzing") && (
-          <section className="pb-8">
+          <section className="pb-8 animate-slide-up">
             <div className="max-w-4xl mx-auto px-4">
               <AnalysisReportView
                 report={analysis}
@@ -245,7 +245,7 @@ function App() {
 
         {/* Optimized Section */}
         {hasOptimized && (
-          <section className="pb-8">
+          <section className="pb-8 animate-slide-up">
             <div className="max-w-4xl mx-auto px-4 space-y-6">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-6 w-6 text-primary" />
@@ -255,10 +255,10 @@ function App() {
               </div>
 
               <Tabs defaultValue="json" className="w-full">
-                <TabsList>
-                  <TabsTrigger value="json">JSON</TabsTrigger>
-                  <TabsTrigger value="tree">Tree</TabsTrigger>
-                  <TabsTrigger value="preview">Preview</TabsTrigger>
+                <TabsList className="w-full sm:w-auto">
+                  <TabsTrigger value="json" className="flex-1 sm:flex-initial">JSON</TabsTrigger>
+                  <TabsTrigger value="tree" className="flex-1 sm:flex-initial">Tree</TabsTrigger>
+                  <TabsTrigger value="preview" className="flex-1 sm:flex-initial">Preview</TabsTrigger>
                 </TabsList>
                 <TabsContent value="json">
                   <JsonViewer

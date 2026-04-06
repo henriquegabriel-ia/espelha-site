@@ -11,6 +11,7 @@ export interface LLMCallOptions {
   userPrompt: string;
   jsonMode?: boolean;
   maxTokens?: number;
+  signal?: AbortSignal;
 }
 
 export interface LLMResponse {
@@ -28,15 +29,15 @@ export interface LLMResponse {
  * Retorna o texto de resposta do modelo.
  */
 export async function callLLM(options: LLMCallOptions): Promise<LLMResponse> {
-  const { provider, systemPrompt, userPrompt, jsonMode = false, maxTokens = 4096 } = options;
+  const { provider, systemPrompt, userPrompt, jsonMode = false, maxTokens = 4096, signal } = options;
 
   switch (provider.provider) {
     case "openai":
-      return callOpenAI(provider, systemPrompt, userPrompt, jsonMode, maxTokens);
+      return callOpenAI(provider, systemPrompt, userPrompt, jsonMode, maxTokens, signal);
     case "anthropic":
-      return callAnthropic(provider, systemPrompt, userPrompt, jsonMode, maxTokens);
+      return callAnthropic(provider, systemPrompt, userPrompt, jsonMode, maxTokens, signal);
     case "gemini":
-      return callGemini(provider, systemPrompt, userPrompt, jsonMode, maxTokens);
+      return callGemini(provider, systemPrompt, userPrompt, jsonMode, maxTokens, signal);
     default:
       throw new Error(`Provider "${provider.provider}" não suportado.`);
   }
@@ -51,6 +52,7 @@ async function callOpenAI(
   userPrompt: string,
   jsonMode: boolean,
   maxTokens: number,
+  signal?: AbortSignal,
 ): Promise<LLMResponse> {
   const body: Record<string, unknown> = {
     model: provider.model,
@@ -72,6 +74,7 @@ async function callOpenAI(
       Authorization: `Bearer ${provider.apiKey}`,
     },
     body: JSON.stringify(body),
+    ...(signal && { signal }),
   });
 
   if (!res.ok) {
@@ -102,6 +105,7 @@ async function callAnthropic(
   userPrompt: string,
   jsonMode: boolean,
   maxTokens: number,
+  signal?: AbortSignal,
 ): Promise<LLMResponse> {
   // Anthropic não tem jsonMode nativo — instruímos via system prompt
   const effectiveSystem = jsonMode
@@ -123,6 +127,7 @@ async function callAnthropic(
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify(body),
+    ...(signal && { signal }),
   });
 
   if (!res.ok) {
@@ -155,6 +160,7 @@ async function callGemini(
   userPrompt: string,
   jsonMode: boolean,
   maxTokens: number,
+  signal?: AbortSignal,
 ): Promise<LLMResponse> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${provider.model}:generateContent?key=${provider.apiKey}`;
 
@@ -178,6 +184,7 @@ async function callGemini(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    ...(signal && { signal }),
   });
 
   if (!res.ok) {
