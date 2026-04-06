@@ -1,6 +1,6 @@
 # Story 4.2: Provider select + BYO key input + banner
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Implementar o sistema de selecao de provider de IA e input de API key propria (BYO - Bring Your Own). O usuario pode escolher entre OpenAI, Anthropic ou Gemini, inserir sua API key que sera salva no localStorage, e ver um banner informativo mostrando qual provider esta ativo. Isso permite que o usuario use sua propria key para ter mais controle sobre as chamadas de IA.
@@ -39,6 +39,21 @@ Implementar o sistema de selecao de provider de IA e input de API key propria (B
 ## Dependencies
 - Story 4.1 (landing page com layout base)
 - shadcn/ui Select, Input, Alert components
+
+## Risks
+- **Seguranca da API key:** Armazenar em localStorage pode ser vulneravel a XSS (mitigacao: sanitizar inputs, CSP headers; aceito como trade-off do MVP per CON-05)
+- **UX de configuracao:** Usuario pode nao entender o conceito de BYO key (mitigacao: banner informativo claro)
+- **Persistencia de keys:** Limpar localStorage perde todas as keys (mitigacao: documentar no UI que keys ficam no browser)
+
+## Definition of Done
+- [ ] ProviderSelect renderiza dropdown com 3 opcoes
+- [ ] ApiKeyInput salva key no localStorage ao confirmar
+- [ ] AiProviderBanner mostra status correto para cada cenario (BYO, Lovable AI, nenhum)
+- [ ] Hook useProvider expoe estado completo do provider
+- [ ] Troca de provider atualiza banner imediatamente
+- [ ] Keys persistidas entre reloads da pagina
+- [ ] Mascara de key funcional (sk-...xxxx)
+- [ ] Code review aprovado
 
 ## Estimate: 3
 

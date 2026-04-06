@@ -37,6 +37,21 @@ Integrar o Firecrawl (managed by Lovable ou via API key) na Edge Function `/scra
 - O campo `screenshot` e opcional e pode ser desabilitado para economizar creditos
 - Rate limiting do Firecrawl: plano free tem limites — tratar erro 429 adequadamente
 
+## Business Value
+Habilita o core do produto: sem scraping, nao ha espelhamento. Firecrawl managed garante zero-config no remix (NFR-04), essencial para a experiencia de compartilhamento.
+
+## Risks
+- Firecrawl plano free tem rate limit -- mitigacao: tratar erro 429 com mensagem clara ao usuario
+- Firecrawl managed pode nao estar disponivel fora do Lovable -- mitigacao: fallback para API key manual
+- Timeout em paginas pesadas (>30s) -- mitigacao: AbortController com 30s e mensagem informativa
+- SDK Firecrawl pode ter incompatibilidade com Deno -- mitigacao: testar `npm:` specifier no inicio, fallback para REST API
+
+## Definition of Done
+- [ ] Todos os Acceptance Criteria passam
+- [ ] Teste manual com 3+ URLs de complexidade variada (statica, SPA, pagina pesada)
+- [ ] Erros retornam mensagens claras e uteis
+- [ ] PR aprovado e mergeado
+
 ## Dependencies
 - Story 1.2 (estrutura das Edge Functions precisa existir)
 

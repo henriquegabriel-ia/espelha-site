@@ -54,9 +54,26 @@ Implementar a Supabase Edge Function `/scrape` que recebe uma URL, valida o inpu
 - Validacao de IP privado: resolver DNS da URL e checar contra ranges privados antes de chamar Firecrawl
 - Timeout da Firecrawl: usar AbortController com 30s
 
+## Business Value
+Ponto de entrada do pipeline de espelhamento. Sem esta funcao, o produto nao tem funcionalidade core. Qualidade do scraping impacta diretamente a qualidade da conversao IA downstream.
+
+## Risks
+- SSRF: URLs maliciosas podem tentar acessar rede interna -- mitigacao: validacao de IP privado antes de chamar Firecrawl
+- Firecrawl timeout em paginas pesadas -- mitigacao: AbortController com 30s
+- Paginas com protecao anti-bot podem falhar -- mitigacao: retornar erro claro, nao tentar bypass
+- Dados scrapeados podem conter XSS -- mitigacao: sanitizacao sera feita no frontend (Epic 4)
+
+## Definition of Done
+- [ ] Todos os Acceptance Criteria passam
+- [ ] SSRF protection testada com URLs de IP privado
+- [ ] Timeout testado (simular pagina lenta)
+- [ ] Tipo `ScrapedPage` usado consistentemente
+- [ ] PR aprovado e mergeado
+
 ## Dependencies
+- Story 1.3 (integracao Firecrawl + tipo ScrapedPage base)
+- Story 1.2 (estrutura das Edge Functions)
 - Firecrawl API key configurada como secret no Supabase
-- Supabase project configurado (Epic 1)
 
 ## Estimate: 3
 

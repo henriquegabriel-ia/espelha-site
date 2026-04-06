@@ -1,6 +1,6 @@
 # Story 4.6: Result actions — download, gerar otimizado, copy
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Implementar o componente ResultActions com botoes de acao sobre o resultado do espelhamento: download do JSON original, geracao de versao otimizada com sugestoes da IA, download do JSON otimizado e copia para clipboard. Essas acoes permitem ao usuario extrair valor concreto do espelhamento e levar os resultados para uso externo.
@@ -45,6 +45,20 @@ Implementar o componente ResultActions com botoes de acao sobre o resultado do e
 - Story 4.2 (provider configurado para chamar /optimize)
 - Story 4.3 (JSON viewer para exibir resultado otimizado)
 - Endpoint /optimize implementado (Epic 3)
+
+## Risks
+- **Clipboard API:** navigator.clipboard pode nao estar disponivel em HTTP ou browsers antigos (mitigacao: fallback com execCommand)
+- **Download de arquivos grandes:** JSONs muito grandes podem causar lentidao no download via Blob (mitigacao: limite ja imposto nas Edge Functions)
+- **Falha na otimizacao:** Endpoint /optimize pode falhar silenciosamente (mitigacao: toast de erro com retry)
+
+## Definition of Done
+- [ ] Botao "Download Original" gera arquivo .json com nome baseado no dominio
+- [ ] Botao "Gerar com Sugestoes" chama /optimize com loading state
+- [ ] Botao "Download Otimizado" aparece apos geracao bem-sucedida
+- [ ] Botao "Copiar" copia JSON para clipboard com feedback visual
+- [ ] Toast de erro com retry em caso de falha
+- [ ] Botao "Download Otimizado" oculto quando nao ha versao otimizada
+- [ ] Code review aprovado
 
 ## Estimate: 2
 

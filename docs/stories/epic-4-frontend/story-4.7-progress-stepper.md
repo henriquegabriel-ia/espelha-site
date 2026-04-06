@@ -1,6 +1,6 @@
 # Story 4.7: Progress stepper
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Criar o componente ProgressStepper que mostra o progresso do fluxo de espelhamento em 3 etapas: Scraping, Convertendo e Analisando. Cada step tem indicador visual de estado (ativo, completo, pendente) com animacao de transicao. O stepper da feedback claro ao usuario sobre o que esta acontecendo enquanto aguarda o resultado.
@@ -42,6 +42,19 @@ Criar o componente ProgressStepper que mostra o progresso do fluxo de espelhamen
 ## Dependencies
 - Story 4.1 (layout base)
 - Fluxo de processamento que emite eventos de progresso (Epic 2/3)
+
+## Risks
+- **Sincronia de estado:** Stepper pode ficar dessincronizado com o estado real do processamento (mitigacao: prop controlada via hook use-espelhar)
+- **Acessibilidade:** Stepper custom pode nao ser acessivel por screen readers (mitigacao: aria-labels, role progressbar)
+
+## Definition of Done
+- [ ] ProgressStepper renderiza 3 steps com icones contextuais
+- [ ] Estados visuais: pending, active, completed funcionando
+- [ ] Linhas de conexao animam conforme progresso
+- [ ] Animacoes de transicao suaves (CSS transitions)
+- [ ] Layout horizontal em desktop, adaptado em mobile
+- [ ] Aria-labels implementados para acessibilidade
+- [ ] Code review aprovado
 
 ## Estimate: 2
 

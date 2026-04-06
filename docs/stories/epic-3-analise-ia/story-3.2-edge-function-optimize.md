@@ -1,6 +1,6 @@
 # Story 3.2: Edge Function /optimize — JSON com Melhorias Aplicadas
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Criar a Supabase Edge Function `/optimize` que recebe o JSON original (json-render spec) junto com a lista de sugestoes geradas pela analise (story 3.1) e retorna um novo JSON otimizado. A funcao chama um LLM instruido a aplicar as melhorias sugeridas diretamente no JSON, mantendo a mesma estrutura de catalogo de componentes da json-render spec. O output e validado com o mesmo Zod schema usado na conversao original, garantindo compatibilidade total com o renderer. Essa funcao alimenta o botao "Gerar com Sugestoes" da interface.
@@ -57,6 +57,23 @@ Criar a Supabase Edge Function `/optimize` que recebe o JSON original (json-rend
 - Zod schema da json-render spec definido no Epic 2
 - Cascata de providers de IA (modulo compartilhado com story 3.1)
 - Env vars dos providers de IA configuradas no Supabase
+
+## Risks
+- **Output invalido:** LLM pode gerar JSON que nao passa na validacao do Zod schema (mitigacao: retry com prompt mais restritivo)
+- **Perda de componentes:** LLM pode remover ou renomear componentes ao otimizar (mitigacao: AC explicito + validacao pos-geracao)
+- **Context window overflow:** JSON original + sugestoes podem exceder contexto (mitigacao: limitar tamanho e priorizar sugestoes high impact)
+- **Inconsistencia entre providers:** Diferentes LLMs podem gerar resultados com qualidade variavel (mitigacao: Zod validation garante formato)
+
+## Definition of Done
+- [ ] Edge Function `/optimize` deployada no Supabase e respondendo via POST
+- [ ] Input validado com Zod (JSON + sugestoes obrigatorios)
+- [ ] Output validado com mesmo Zod schema da json-render spec
+- [ ] Cascata de providers funcionando (reutilizando modulo compartilhado com 3.1)
+- [ ] Header `X-AI-Provider` retornado em todas as respostas
+- [ ] JSON otimizado renderiza sem erros no json-render
+- [ ] Testes manuais com pelo menos 3 JSONs distintos
+- [ ] Error handling: 400 para input invalido, 503 para falha total de providers
+- [ ] Code review aprovado
 
 ## Estimate: 5
 

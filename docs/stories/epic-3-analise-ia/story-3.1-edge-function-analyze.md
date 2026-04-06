@@ -1,6 +1,6 @@
 # Story 3.1: Edge Function /analyze — Relatorio de Analise IA
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Criar a Supabase Edge Function `/analyze` que recebe um JSON (json-render spec) junto com a URL original do site e retorna um relatorio estruturado de analise. A funcao chama um LLM para avaliar o site em 4 dimensoes (Design/UI, SEO, Conteudo, Estrutura Tecnica), retornando pontos positivos, negativos e sugestoes de melhoria categorizadas por impacto. Essa funcao e o alicerce da feature de analise inteligente do Espelha Site, permitindo que o usuario entenda os pontos fortes e fracos do site convertido antes de decidir aplicar otimizacoes.
@@ -59,6 +59,23 @@ Criar a Supabase Edge Function `/analyze` que recebe um JSON (json-render spec) 
 - Epic 2 (conversao URL -> JSON) deve estar funcional para gerar o input
 - Env vars dos providers de IA configuradas no Supabase
 - Cascata de providers de IA implementada (pode ser util compartilhada com story 3.2)
+
+## Risks
+- **Prompt quality:** Output do LLM pode variar em qualidade e consistencia entre providers (mitigacao: Zod validation + retry)
+- **Context window overflow:** JSONs muito grandes podem estourar limite do modelo (mitigacao: truncar input com limite definido)
+- **Latencia:** Chamada ao LLM pode exceder 15s em modelos mais lentos (mitigacao: usar modelos rapidos como gpt-4o-mini, haiku, gemini-flash)
+- **Cascata de fallback:** Se todos os providers falharem, usuario fica sem resultado (mitigacao: mensagem clara com orientacao)
+
+## Definition of Done
+- [ ] Edge Function `/analyze` deployada no Supabase e respondendo via POST
+- [ ] Input validado com Zod (JSON + URL obrigatorios)
+- [ ] Output validado com Zod (AnalysisReport tipado)
+- [ ] Cascata de providers funcionando (BYO key -> Lovable AI -> erro 503)
+- [ ] Header `X-AI-Provider` retornado em todas as respostas
+- [ ] Testes manuais com pelo menos 3 URLs distintas
+- [ ] Error handling: 400 para input invalido, 503 para falha total de providers
+- [ ] Logs estruturados implementados
+- [ ] Code review aprovado
 
 ## Estimate: 5
 

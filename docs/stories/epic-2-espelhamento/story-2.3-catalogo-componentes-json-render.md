@@ -62,6 +62,24 @@ Definir o catalogo completo de componentes permitidos para o json-render em `src
   ```
 - Considerar usar `z.discriminatedUnion` ou mapeamento manual por type para validacao por componente
 
+## Business Value
+Fonte da verdade para todo o pipeline de conversao. Garante que a IA so gera componentes que o frontend sabe renderizar, eliminando outputs inuteis. `getCatalogPromptText()` padroniza o prompt, melhorando consistencia do output.
+
+## Risks
+- Spec json-render do Vercel Labs pode mudar -- mitigacao: fixar versao da spec usada, documentar no codigo
+- Catalogo muito restritivo pode limitar qualidade do espelhamento -- mitigacao: 13 componentes cobrem maioria dos sites, extensivel no futuro
+- Validacao Zod muito rigorosa pode rejeitar outputs validos -- mitigacao: usar `.passthrough()` em props opcionais, testar com outputs reais
+- `z.discriminatedUnion` pode ter limitacoes com tipos complexos -- mitigacao: considerar mapeamento manual por type
+
+## Definition of Done
+- [ ] Todos os Acceptance Criteria passam
+- [ ] 13 componentes definidos com Zod schemas
+- [ ] `JsonRenderDocumentSchema` valida documentos completos
+- [ ] `getCatalogPromptText()` gera texto legivel
+- [ ] Tipos TypeScript inferidos e exportados
+- [ ] Testes unitarios para validacao de JSON valido e invalido
+- [ ] PR aprovado e mergeado
+
 ## Dependencies
 - Zod como dependencia do projeto (ja instalado)
 - Spec json-render do Vercel Labs como referencia

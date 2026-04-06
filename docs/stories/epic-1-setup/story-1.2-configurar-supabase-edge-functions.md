@@ -37,6 +37,20 @@ Configurar o Supabase como backend do Espelha Site, incluindo o client no fronte
 - Para dev local, usar `supabase functions serve` (requer Supabase CLI instalado)
 - Tipo base de response: `{ success: boolean; data?: T; error?: string }`
 
+## Business Value
+Estabelece a camada de backend serverless que todas as features core dependem. Sem as Edge Functions, nao ha scraping, conversao, analise ou otimizacao. Type-safety end-to-end reduz bugs em producao.
+
+## Risks
+- Supabase CLI local pode ter versao incompativel com Edge Functions Deno -- mitigacao: fixar versao da CLI e documentar no README
+- CORS mal configurado pode bloquear chamadas do frontend -- mitigacao: testar cross-origin desde o AC inicial
+- Deno runtime tem diferentas de Node.js (imports, APIs) -- mitigacao: documentar padroes no `_shared/`
+
+## Definition of Done
+- [ ] Todos os Acceptance Criteria passam
+- [ ] `supabase functions serve` roda sem erros
+- [ ] Tipos compilam sem erros (`npm run typecheck`)
+- [ ] PR aprovado e mergeado
+
 ## Dependencies
 - Story 1.1 (projeto base precisa estar configurado)
 

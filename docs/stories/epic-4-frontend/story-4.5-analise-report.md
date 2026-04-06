@@ -1,6 +1,6 @@
 # Story 4.5: Relatorio de analise IA
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Criar o componente AnalysisReport que exibe o resultado da analise feita pela IA sobre o site espelhado. O relatorio e dividido em tres secoes — Positivos, Negativos e Sugestoes — com cards individuais para cada item. As sugestoes incluem badges de impacto e todos os itens sao categorizados (Design, SEO, Conteudo, Estrutura). Isso ajuda o usuario a entender rapidamente o que esta bom, o que precisa melhorar e como melhorar.
@@ -51,6 +51,20 @@ Criar o componente AnalysisReport que exibe o resultado da analise feita pela IA
 ## Dependencies
 - Story 4.1 (layout base)
 - Endpoint /analyze retornando dados estruturados (Epic 3)
+
+## Risks
+- **Dados inconsistentes da IA:** Relatorio pode vir com campos faltando ou categorias inesperadas (mitigacao: validacao no frontend + empty state por secao)
+- **Relatorios muito longos:** Muitos itens podem tornar a UI poluida (mitigacao: secoes collapsible, contadores)
+
+## Definition of Done
+- [ ] AnalysisReport renderiza 3 secoes: Positivos, Negativos, Sugestoes
+- [ ] Cards com icones corretos por tipo (check, alert, lampada)
+- [ ] Badges de impacto (High/Medium/Low) com cores semanticas
+- [ ] CategoryTags com icones por dimensao
+- [ ] Contadores por secao
+- [ ] Empty state para secoes vazias
+- [ ] Layout responsivo em grid
+- [ ] Code review aprovado
 
 ## Estimate: 3
 

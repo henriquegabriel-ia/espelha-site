@@ -65,9 +65,27 @@ Implementar a Supabase Edge Function `/convert` que recebe um `ScrapedPage` e us
 - Timeout da LLM: 60s via AbortController
 - Considerar limitar tokens de output para evitar custos excessivos
 
+## Business Value
+Funcao central do produto: transforma dados brutos em componentes UI renderizaveis. E o "espelhamento" propriamente dito. Qualidade do prompt e validacao determinam a utilidade do output para o usuario final.
+
+## Risks
+- LLM pode gerar JSON invalido ou componentes fora do catalogo -- mitigacao: validacao Zod com rejeicao clara (422)
+- Custo de tokens pode ser alto para paginas grandes -- mitigacao: limitar tokens de output, usar modelos rapidos (gpt-4o-mini, haiku, gemini-flash)
+- Prompt injection via conteudo scrapeado -- mitigacao: conteudo isolado na user message (nao no system prompt), conforme arquitetura
+- Latencia variavel entre providers -- mitigacao: timeout de 60s, feedback de progresso no frontend
+- Output pode variar muito entre execucoes -- mitigacao: temperature baixa, structured output quando disponivel
+
+## Definition of Done
+- [ ] Todos os Acceptance Criteria passam
+- [ ] Output validado com Zod em 100% dos casos
+- [ ] Testado com pelo menos 2 providers diferentes (ex: OpenAI + Anthropic)
+- [ ] System prompt documentado e revisado
+- [ ] PR aprovado e mergeado
+
 ## Dependencies
 - Story 2.1 (tipo `ScrapedPage`)
 - Story 2.3 (catalogo de componentes + Zod schema + texto para prompt)
+- Story 1.4 (provider IA com cascata)
 - Lovable AI endpoint configurado como env var no Supabase
 - Supabase project configurado (Epic 1)
 

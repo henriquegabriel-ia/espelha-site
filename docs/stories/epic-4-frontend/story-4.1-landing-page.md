@@ -1,6 +1,6 @@
 # Story 4.1: Landing page com hero e input de URL
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Criar a landing page principal do Espelha Site com visual dark mode, contendo header com logo e theme toggle, hero section com campo de URL e botao de acao, secao de features e footer. Esta pagina e o ponto de entrada do usuario e deve comunicar claramente o proposito da ferramenta em poucos segundos.
@@ -42,6 +42,21 @@ Criar a landing page principal do Espelha Site com visual dark mode, contendo he
 - shadcn/ui inicializado no projeto
 - Tailwind CSS configurado com palette customizada (zinc, blue, green)
 - Fontes Inter e JetBrains Mono importadas
+
+## Risks
+- **Responsividade:** Layout pode quebrar em viewports intermediarios (mitigacao: testar em 320px, 768px, 1024px, 1440px)
+- **Dark mode inconsistencia:** Cores podem nao funcionar bem em ambos os modos (mitigacao: usar palette do design system com variantes dark/light)
+- **Performance de fontes:** Import de fontes externas pode atrasar first paint (mitigacao: font-display swap, preload)
+
+## Definition of Done
+- [ ] Landing page renderiza corretamente em dark mode (default)
+- [ ] Header com logo e theme toggle funcional
+- [ ] Hero com input de URL e botao "Espelhar" funcional
+- [ ] Secao de features com 3 cards renderizando
+- [ ] Footer com link GitHub
+- [ ] Responsivo em mobile (< 768px) e desktop
+- [ ] Lighthouse performance score > 90
+- [ ] Code review aprovado
 
 ## Estimate: 3
 

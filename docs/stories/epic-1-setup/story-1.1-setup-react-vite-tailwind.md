@@ -36,6 +36,20 @@ Inicializar o projeto base do Espelha Site com a stack definida (React + Vite + 
 - Path alias `@/` deve ser configurado tanto no `tsconfig.json` quanto no `vite.config.ts`
 - Considerar `tsconfig.app.json` separado para o app (padrao Vite 6)
 
+## Business Value
+Alicerce tecnico do projeto. Sem este setup, nenhuma outra story pode ser iniciada. Garante que a stack esta funcional e padronizada desde o inicio, evitando retrabalho futuro.
+
+## Risks
+- Tailwind CSS v4 (engine Rust) pode ter incompatibilidades com shadcn/ui -- mitigacao: testar compatibilidade no inicio e fallback para v3 se necessario
+- Vite 6.x pode ter breaking changes em plugins -- mitigacao: fixar versoes no package.json
+
+## Definition of Done
+- [ ] Todos os Acceptance Criteria passam
+- [ ] `npm run dev` inicia sem warnings criticos
+- [ ] `npm run lint` passa sem erros
+- [ ] `npm run build` gera bundle sem erros
+- [ ] PR aprovado e mergeado na branch principal
+
 ## Dependencies
 - Nenhuma (esta e a primeira story do projeto)
 

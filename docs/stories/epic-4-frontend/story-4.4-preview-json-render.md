@@ -1,6 +1,6 @@
 # Story 4.4: Preview visual json-render
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Adicionar uma tab [Preview] ao viewer que renderiza o JSON no formato json-render como componentes visuais reais usando @json-render/react. O usuario podera ver uma previa de como o site espelhado ficaria reconstruido a partir do JSON, usando componentes shadcn/ui mapeados ao catalogo json-render. Isso torna o espelhamento tangivel e compreensivel visualmente.
@@ -48,6 +48,20 @@ Adicionar uma tab [Preview] ao viewer que renderiza o JSON no formato json-rende
 - Story 4.3 (JSON viewer com sistema de tabs)
 - @json-render/react package instalado
 - Catalogo json-render definido (Epic 2)
+
+## Risks
+- **Disponibilidade do @json-render/react:** Pacote pode ter API instavel ou breaking changes (mitigacao: pinnar versao, verificar compatibilidade antes de iniciar)
+- **Componentes nao mapeados:** JSON pode conter tipos nao previstos no catalogo (mitigacao: fallback visual com placeholder)
+- **XSS via conteudo renderizado:** Dados scrapeados podem conter scripts maliciosos (mitigacao: sanitizar props antes de renderizar, ErrorBoundary)
+
+## Definition of Done
+- [ ] Tab Preview adicionada ao viewer (terceira tab)
+- [ ] Todos os componentes do catalogo mapeados para shadcn/ui equivalentes
+- [ ] Fallback visual para nodes nao reconhecidos
+- [ ] ErrorBoundary implementado com mensagem amigavel
+- [ ] Layout respeita hierarquia e aninhamento dos nodes
+- [ ] Preview funciona com JSONs gerados pela /convert
+- [ ] Code review aprovado
 
 ## Estimate: 5
 

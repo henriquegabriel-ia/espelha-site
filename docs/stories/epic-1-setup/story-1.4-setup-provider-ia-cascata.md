@@ -58,6 +58,22 @@ Implementar a logica de selecao de provider de IA nas Edge Functions com sistema
 - Considerar timeout de 60s para chamadas de IA (modelos grandes podem demorar)
 - Para testes, criar um `MockProvider` que retorna respostas fixas
 
+## Business Value
+Garante flexibilidade maxima: usuarios com API key propria tem melhor qualidade, remixes no Lovable funcionam sem config (NFR-04), e usuarios sem nenhum provider recebem orientacao clara. E o diferencial de UX do produto.
+
+## Risks
+- Lovable AI endpoint pode mudar sem aviso -- mitigacao: abstrair deteccao em funcao isolada, facil de atualizar
+- APIs de providers (OpenAI, Anthropic, Gemini) tem interfaces diferentes -- mitigacao: wrapper padronizado `AIProvider`
+- API keys do usuario podem ser invalidas/expiradas -- mitigacao: tratar erro 401/403 com mensagem especifica
+- Timeout variavel entre providers -- mitigacao: AbortController com 60s padrao
+
+## Definition of Done
+- [ ] Todos os Acceptance Criteria passam
+- [ ] MockProvider funcional para testes
+- [ ] Cada provider (OpenAI, Anthropic, Gemini) testado com key valida
+- [ ] Cascata funciona corretamente: BYO > Lovable AI > erro
+- [ ] PR aprovado e mergeado
+
 ## Dependencies
 - Story 1.2 (estrutura das Edge Functions e `_shared/` precisa existir)
 

@@ -1,6 +1,6 @@
 # Story 4.8: Loading states e error handling
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Implementar os estados de loading (skeletons) e tratamento de erros (toasts) em toda a aplicacao. Inclui skeleton loading para o JSON viewer e relatorio de analise, toasts de erro com mensagens contextuais e retry, e empty state para quando nenhuma URL foi espelhada. Esses estados garantem que o usuario sempre tenha feedback visual claro sobre o que esta acontecendo.
@@ -55,6 +55,20 @@ Implementar os estados de loading (skeletons) e tratamento de erros (toasts) em 
 - Story 4.3 (JSON viewer - para saber a forma do skeleton)
 - Story 4.5 (relatorio de analise - para saber a forma do skeleton)
 - shadcn/ui Skeleton e Toast components
+
+## Risks
+- **Mensagens de erro genericas:** Erros nao mapeados podem mostrar mensagens tecnicas ao usuario (mitigacao: fallback para mensagem generica amigavel "Erro inesperado")
+- **Toast overflow:** Muitos erros simultaneos podem poluir a UI com toasts empilhados (mitigacao: limitar toasts visiveis, auto-dismiss)
+
+## Definition of Done
+- [ ] JsonViewerSkeleton renderiza com linhas simulando codigo
+- [ ] AnalysisReportSkeleton renderiza com cards simulados
+- [ ] Toasts de erro com mensagens contextuais para cada tipo de erro
+- [ ] Botao Retry funcional em todos os toasts de erro
+- [ ] EmptyState renderiza quando nenhuma URL foi espelhada
+- [ ] Mapeamento de codigos de erro implementado
+- [ ] Skeletons respeitam dark/light mode
+- [ ] Code review aprovado
 
 ## Estimate: 2
 

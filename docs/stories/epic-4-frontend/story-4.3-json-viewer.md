@@ -1,6 +1,6 @@
 # Story 4.3: JSON viewer com syntax highlight e tree view
 
-## Status: Draft
+## Status: Ready
 
 ## Descricao
 Criar o componente JsonViewer com duas visualizacoes: uma aba JSON com syntax highlight e line numbers, e uma aba Tree com navegacao collapsible dos nodes. O viewer e a principal interface para o usuario inspecionar o resultado do espelhamento em formato json-render. Deve suportar busca dentro do JSON e usar fonte monospacada (JetBrains Mono).
@@ -43,6 +43,21 @@ Criar o componente JsonViewer com duas visualizacoes: uma aba JSON com syntax hi
 - Story 4.1 (layout base)
 - Dados JSON vindos do fluxo de espelhamento (Epic 2/3)
 - Fonte JetBrains Mono carregada no projeto
+
+## Risks
+- **Performance com JSONs grandes:** JSONs > 1MB podem travar o browser (mitigacao: virtualizacao com react-window ou limite de renderizacao)
+- **Lib de syntax highlight:** Dependencia de lib externa pode ter breaking changes ou peso excessivo (mitigacao: avaliar react-json-view-lite vs Shiki, escolher mais leve)
+- **Acessibilidade:** Tree view custom pode nao ser acessivel por teclado (mitigacao: implementar aria-expanded, aria-controls, keyboard nav)
+
+## Definition of Done
+- [ ] JsonViewer renderiza com duas tabs: JSON e Tree
+- [ ] Tab JSON com syntax highlight, line numbers e scroll
+- [ ] Tab Tree com nodes collapsible e botoes expandir/colapsar tudo
+- [ ] Campo de busca com highlight de matches
+- [ ] Fonte JetBrains Mono aplicada
+- [ ] Botao copy no header do viewer
+- [ ] Performance aceitavel com JSONs de ate 500KB
+- [ ] Code review aprovado
 
 ## Estimate: 5
 
