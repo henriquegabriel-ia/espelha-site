@@ -36,9 +36,27 @@ export function ResultActions({
     data: Record<string, unknown>,
     setter: (v: boolean) => void,
   ) {
-    await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-    setter(true);
-    setTimeout(() => setter(false), 2000);
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+      setter(true);
+      setTimeout(() => setter(false), 2000);
+    } catch {
+      // Fallback for browsers/contexts where clipboard API is unavailable
+      try {
+        const textarea = document.createElement("textarea");
+        textarea.value = JSON.stringify(data, null, 2);
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        setter(true);
+        setTimeout(() => setter(false), 2000);
+      } catch {
+        // Silent fail — clipboard not available
+      }
+    }
   }
 
   return (

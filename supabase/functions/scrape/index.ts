@@ -74,7 +74,7 @@ function validateUrl(raw: string): { valid: boolean; error?: string } {
     return { valid: false, error: "URL bloqueada: endereços locais não são permitidos." };
   }
 
-  // Block private IP ranges
+  // Block private/reserved IP ranges (SSRF protection)
   const ipv4Match = hostname.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
   if (ipv4Match) {
     const [, a, b] = ipv4Match.map(Number);
@@ -83,10 +83,17 @@ function validateUrl(raw: string): { valid: boolean; error?: string } {
       a === 127 ||                             // 127.0.0.0/8
       (a === 172 && b >= 16 && b <= 31) ||     // 172.16.0.0/12
       (a === 192 && b === 168) ||              // 192.168.0.0/16
+      (a === 169 && b === 254) ||              // 169.254.0.0/16 (link-local / cloud metadata)
+      (a === 100 && b >= 64 && b <= 127) ||    // 100.64.0.0/10 (CGNAT)
       a === 0                                  // 0.0.0.0/8
     ) {
       return { valid: false, error: "URL bloqueada: endereços IP privados não são permitidos." };
     }
+  }
+
+  // Block IPv6 shorthand notations that could bypass above checks
+  if (hostname.startsWith("[") || hostname.includes(":")) {
+    return { valid: false, error: "URL bloqueada: endereços IPv6 diretos não são permitidos." };
   }
 
   return { valid: true };
@@ -234,12 +241,17 @@ serve(async (req: Request) => {
       let detail = "";
       try {
         const errBody = await firecrawlRes.json();
-        detail = errBody?.error || errBody?.message || JSON.stringify(errBody);
+        detail = errBody?.error || errBody?.message || "";
       } catch {
-        detail = await firecrawlRes.text();
+        detail = "";
       }
+      // Log full detail server-side, return sanitized message to client
+      console.error(`[scrape] Firecrawl error (${firecrawlRes.status}): ${detail}`);
+      const clientMessage = firecrawlRes.status === 429
+        ? "Serviço de scraping com muitas requisições. Tente novamente em alguns minutos."
+        : "Não foi possível processar o site. Verifique se a URL está acessível.";
       return new Response(
-        JSON.stringify({ error: `Firecrawl retornou erro (${firecrawlRes.status}): ${detail}` }),
+        JSON.stringify({ error: clientMessage }),
         { status: 502, headers: JSON_HEADERS }
       );
     }

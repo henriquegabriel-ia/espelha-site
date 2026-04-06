@@ -6,6 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface JsonViewerProps {
   data: Record<string, unknown> | null;
   isLoading?: boolean;
+  /** When set, renders only the specified view without internal Tabs */
+  mode?: "json" | "tree";
 }
 
 // --- Syntax Highlight (Tab JSON) ---
@@ -49,7 +51,7 @@ function JsonSyntaxView({ data }: { data: Record<string, unknown> }) {
   const lines = highlighted.split("\n");
 
   return (
-    <div className="relative overflow-auto rounded-md border border-border bg-zinc-100 dark:bg-zinc-900">
+    <div className="relative overflow-auto rounded-md border border-border bg-zinc-100 dark:bg-zinc-900" role="region" aria-label="JSON code viewer">
       <pre className="font-mono text-sm leading-6 p-4">
         <code>
           {lines.map((line, i) => (
@@ -227,7 +229,7 @@ function JsonViewerSkeleton() {
 
 // --- Main Component ---
 
-export function JsonViewer({ data, isLoading }: JsonViewerProps) {
+export function JsonViewer({ data, isLoading, mode }: JsonViewerProps) {
   if (isLoading) {
     return (
       <div className="space-y-3">
@@ -245,6 +247,15 @@ export function JsonViewer({ data, isLoading }: JsonViewerProps) {
     );
   }
 
+  // When mode is specified, render that view directly (used by parent Tabs)
+  if (mode === "json") {
+    return <JsonSyntaxView data={data} />;
+  }
+  if (mode === "tree") {
+    return <JsonTreeView data={data} />;
+  }
+
+  // Default: render with internal Tabs (standalone usage)
   return (
     <Tabs defaultValue="json" className="w-full">
       <TabsList className="w-full sm:w-auto">

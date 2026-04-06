@@ -162,7 +162,7 @@ async function callGemini(
   maxTokens: number,
   signal?: AbortSignal,
 ): Promise<LLMResponse> {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${provider.model}:generateContent?key=${provider.apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${provider.model}:generateContent`;
 
   const body: Record<string, unknown> = {
     systemInstruction: {
@@ -182,7 +182,10 @@ async function callGemini(
 
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": provider.apiKey,
+    },
     body: JSON.stringify(body),
     ...(signal && { signal }),
   });

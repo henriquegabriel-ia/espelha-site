@@ -202,12 +202,14 @@ function App() {
                   <JsonViewer
                     data={jsonRender as unknown as Record<string, unknown> | null}
                     isLoading={step === "scraping" || step === "converting"}
+                    mode="json"
                   />
                 </TabsContent>
                 <TabsContent value="tree">
                   <JsonViewer
                     data={jsonRender as unknown as Record<string, unknown> | null}
                     isLoading={step === "scraping" || step === "converting"}
+                    mode="tree"
                   />
                 </TabsContent>
                 <TabsContent value="preview">
@@ -263,11 +265,13 @@ function App() {
                 <TabsContent value="json">
                   <JsonViewer
                     data={optimizedJson as unknown as Record<string, unknown>}
+                    mode="json"
                   />
                 </TabsContent>
                 <TabsContent value="tree">
                   <JsonViewer
                     data={optimizedJson as unknown as Record<string, unknown>}
+                    mode="tree"
                   />
                 </TabsContent>
                 <TabsContent value="preview">

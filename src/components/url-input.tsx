@@ -46,6 +46,7 @@ export function UrlInput({ onSubmit, isLoading, disabled }: UrlInputProps) {
         <Input
           type="url"
           placeholder="https://exemplo.com"
+          aria-label="URL do site para espelhar"
           value={url}
           onChange={(e) => {
             setUrl(e.target.value);
@@ -69,7 +70,7 @@ export function UrlInput({ onSubmit, isLoading, disabled }: UrlInputProps) {
         </Button>
       </div>
       {error && (
-        <p className="text-sm text-destructive">{error}</p>
+        <p role="alert" className="text-sm text-destructive">{error}</p>
       )}
     </form>
   );

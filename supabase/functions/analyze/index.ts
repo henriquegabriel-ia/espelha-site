@@ -73,7 +73,7 @@ serve(async (req: Request) => {
     if (req.method !== "POST") {
       return new Response(
         JSON.stringify({ error: "Método não permitido. Use POST." }),
-        { status: 400, headers: jsonHeaders },
+        { status: 405, headers: jsonHeaders },
       );
     }
 

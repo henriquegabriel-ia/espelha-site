@@ -196,6 +196,10 @@ serve(async (req: Request) => {
   }
 
   // --- 1. Validate input ---------------------------------------------------
+  if (req.method !== "POST") {
+    return errorResponse("Método não permitido. Use POST.", 405);
+  }
+
   let body: OptimizeRequestBody;
   try {
     body = await req.json();

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Eye, EyeOff, Trash2, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,17 +13,26 @@ export function ApiKeyInput({ apiKey, onSave, onClear }: ApiKeyInputProps) {
   const [value, setValue] = useState(apiKey);
   const [visible, setVisible] = useState(false);
   const [saved, setSaved] = useState(false);
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync external changes (e.g. after clear)
   useEffect(() => {
     setValue(apiKey);
   }, [apiKey]);
 
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    };
+  }, []);
+
   const handleSave = useCallback(() => {
     if (!value.trim()) return;
     onSave(value.trim());
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    savedTimerRef.current = setTimeout(() => setSaved(false), 2000);
   }, [value, onSave]);
 
   const handleClear = useCallback(() => {
@@ -38,6 +47,7 @@ export function ApiKeyInput({ apiKey, onSave, onClear }: ApiKeyInputProps) {
         <Input
           type={visible ? "text" : "password"}
           placeholder="Cole sua API key aqui..."
+          aria-label="API key do provedor de IA"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={(e) => {

@@ -3,16 +3,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { JsonRenderElement } from "@/types/espelhar";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
-
-interface JsonRenderElement {
-  type: string;
-  props: Record<string, unknown>;
-  children?: string[];
-}
 
 interface JsonRenderData {
   root: string;
@@ -170,7 +165,7 @@ function renderElement(
                 {headers?.map((header, i) => (
                   <th
                     key={i}
-                    className="border border-zinc-700 bg-zinc-800/50 px-3 py-2 text-left font-medium text-foreground"
+                    className="border border-border bg-muted/50 px-3 py-2 text-left font-medium text-foreground"
                   >
                     {header}
                   </th>
@@ -183,7 +178,7 @@ function renderElement(
                   {row.map((cell, ci) => (
                     <td
                       key={ci}
-                      className="border border-zinc-700 px-3 py-2 text-muted-foreground"
+                      className="border border-border px-3 py-2 text-muted-foreground"
                     >
                       {cell}
                     </td>
@@ -242,7 +237,7 @@ function renderElement(
       return (
         <section
           key={id}
-          className="flex flex-col items-center gap-4 rounded-lg bg-zinc-800/30 px-6 py-12 text-center"
+          className="flex flex-col items-center gap-4 rounded-lg bg-muted/30 px-6 py-12 text-center"
         >
           <h1 className="text-3xl font-bold text-foreground">{title}</h1>
           {subtitle && (
@@ -267,7 +262,7 @@ function renderElement(
       return (
         <nav
           key={id}
-          className="flex flex-wrap items-center gap-4 border-b border-zinc-700 pb-3"
+          className="flex flex-wrap items-center gap-4 border-b border-border pb-3"
         >
           {items?.map((item, i) => (
             <a
@@ -290,7 +285,7 @@ function renderElement(
       return (
         <footer
           key={id}
-          className="flex flex-col items-center gap-2 border-t border-zinc-700 pt-4 text-xs text-muted-foreground"
+          className="flex flex-col items-center gap-2 border-t border-border pt-4 text-xs text-muted-foreground"
         >
           <p>{text}</p>
           {links && links.length > 0 && (
@@ -348,9 +343,9 @@ function PreviewSkeleton() {
 
 export function JsonRenderPreview({ data, isLoading }: JsonRenderPreviewProps) {
   return (
-    <div className="rounded-lg border border-zinc-800 bg-zinc-950/50">
+    <div className="rounded-lg border border-border bg-zinc-100 dark:bg-zinc-950/50">
       {/* Header label */}
-      <div className="border-b border-zinc-800 px-4 py-2">
+      <div className="border-b border-border px-4 py-2">
         <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Preview
         </span>
