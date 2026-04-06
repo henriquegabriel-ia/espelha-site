@@ -1,0 +1,21 @@
+import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
+import { corsHeaders } from "../_shared/cors.ts";
+
+serve(async (req: Request) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
+  try {
+    // TODO: implement
+    return new Response(
+      JSON.stringify({ error: "Not implemented" }),
+      { status: 501, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+});
