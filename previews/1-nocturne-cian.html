@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview: Nocturne Cian — Espelha Site</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #071111;
+    --bg-secondary: #0A1A1A;
+    --bg-tertiary: #0D2222;
+    --accent: #7DE8EB;
+    --accent-secondary: #5DD8DB;
+    --accent-soft: #5BA8AA;
+    --accent-hover: #A0F0F2;
+    --text-primary: #E8F4F4;
+    --text-secondary: #8BAAAA;
+    --text-muted: #4A6A6A;
+    --glow: rgba(125, 232, 235, 0.3);
+    --glass-bg: rgba(125, 232, 235, 0.04);
+    --glass-border: rgba(125, 232, 235, 0.1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg-primary); color: var(--text-primary); font-family: 'Inter', system-ui; min-height: 100vh; }
+
+  /* Header */
+  header { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(16px); background: rgba(7,17,17,0.85); border-bottom: 1px solid var(--glass-border); }
+  .header-inner { max-width: 900px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'Space Grotesk', system-ui; font-weight: 700; font-size: 18px; letter-spacing: -0.045em; color: var(--accent); }
+  .theme-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-secondary); cursor: pointer; font-size: 16px; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 80px 24px 48px; position: relative; }
+  .hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 800px; height: 400px; background: radial-gradient(ellipse at 50% 0%, rgba(125, 232, 235, 0.12) 0%, transparent 70%); pointer-events: none; }
+  .hero h1 { font-family: 'Space Grotesk', system-ui; font-size: 56px; font-weight: 700; letter-spacing: -0.045em; line-height: 0.92; margin-bottom: 16px; background: linear-gradient(135deg, #7DE8EB, #5BA8AA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 18px; color: var(--text-secondary); max-width: 500px; margin: 0 auto 40px; line-height: 1.7; }
+
+  /* Input */
+  .input-row { max-width: 560px; margin: 0 auto; display: flex; gap: 8px; }
+  .input-row input { flex: 1; height: 52px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-primary); font-size: 15px; font-family: 'JetBrains Mono', monospace; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  .input-row input:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(125, 232, 235, 0.15); }
+  .input-row input::placeholder { color: var(--text-muted); }
+  .btn-primary { height: 52px; padding: 0 28px; border-radius: 12px; border: none; background: var(--accent); color: var(--bg-primary); font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.2s; font-family: 'Inter', system-ui; }
+  .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 0 30px var(--glow); transform: translateY(-1px); }
+
+  /* Provider row */
+  .provider-row { max-width: 560px; margin: 16px auto 0; display: flex; gap: 8px; align-items: center; }
+  .provider-select { height: 40px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-secondary); font-size: 13px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+  .api-key-input { flex: 1; height: 40px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-secondary); font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+
+  /* Banner */
+  .banner { max-width: 560px; margin: 16px auto 0; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text-secondary); font-size: 13px; display: flex; align-items: center; gap: 8px; }
+
+  /* Features */
+  .features { max-width: 900px; margin: 0 auto; padding: 64px 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature-card { padding: 28px; border-radius: 16px; border: 1px solid var(--glass-border); background: var(--glass-bg); backdrop-filter: blur(16px); transition: all 0.3s; }
+  .feature-card:hover { border-color: var(--accent-soft); box-shadow: 0 0 40px rgba(125, 232, 235, 0.08); transform: translateY(-2px); }
+  .feature-icon { font-size: 28px; margin-bottom: 16px; }
+  .feature-card h3 { font-family: 'Space Grotesk', system-ui; font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+  .feature-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+  /* JSON Preview */
+  .json-section { max-width: 900px; margin: 0 auto; padding: 0 24px 64px; }
+  .json-section h2 { font-family: 'Space Grotesk', system-ui; font-size: 24px; font-weight: 700; margin-bottom: 16px; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .tab { padding: 8px 20px; border-radius: 8px; border: 1px solid transparent; background: transparent; color: var(--text-muted); font-size: 13px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+  .tab.active { background: var(--glass-bg); border-color: var(--glass-border); color: var(--accent); }
+  .json-viewer { border-radius: 12px; border: 1px solid var(--glass-border); background: var(--bg-secondary); padding: 24px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.8; overflow-x: auto; }
+  .json-key { color: var(--accent-soft); }
+  .json-string { color: #6EE7B7; }
+  .json-number { color: #93C5FD; }
+  .json-bracket { color: var(--text-muted); }
+
+  /* Actions */
+  .actions { display: flex; gap: 8px; margin-top: 16px; }
+  .btn-outline { height: 40px; padding: 0 20px; border-radius: 8px; border: 1px solid var(--glass-border); background: transparent; color: var(--text-secondary); font-size: 13px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Footer */
+  footer { border-top: 1px solid var(--glass-border); padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px; }
+
+  /* Label */
+  .template-label { position: fixed; top: 70px; right: 16px; background: var(--accent); color: var(--bg-primary); padding: 8px 16px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; z-index: 100; }
+</style>
+</head>
+<body>
+  <div class="template-label">#1 Nocturne Cian</div>
+  <header><div class="header-inner"><span class="logo">Espelha Site</span><button class="theme-btn">*</button></div></header>
+
+  <section class="hero">
+    <h1>Espelha Site</h1>
+    <p>Espelhe qualquer site. Analise. Otimize. Copie.</p>
+    <div class="input-row">
+      <input type="url" placeholder="https://exemplo.com">
+      <button class="btn-primary">Espelhar</button>
+    </div>
+    <div class="provider-row">
+      <select class="provider-select"><option>OPENAI</option><option>ANTHROPIC</option><option>GEMINI</option></select>
+      <input class="api-key-input" type="password" placeholder="API Key (opcional)">
+    </div>
+    <div class="banner">Usando Lovable AI integrada. Conecte uma API key para mais controle.</div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card"><div class="feature-icon">&#128279;</div><h3>Espelha</h3><p>Converte qualquer URL em JSON estruturado</p></div>
+    <div class="feature-card"><div class="feature-icon">&#128269;</div><h3>Analisa</h3><p>IA avalia design, SEO, conteudo e estrutura</p></div>
+    <div class="feature-card"><div class="feature-icon">&#10024;</div><h3>Otimiza</h3><p>Gera versao melhorada com sugestoes aplicadas</p></div>
+  </section>
+
+  <section class="json-section">
+    <h2>JSON Render</h2>
+    <div class="tabs">
+      <button class="tab active">JSON</button>
+      <button class="tab">TREE</button>
+      <button class="tab">PREVIEW</button>
+    </div>
+    <div class="json-viewer">
+<span class="json-bracket">{</span>
+  <span class="json-key">"root"</span>: <span class="json-string">"section-hero"</span>,
+  <span class="json-key">"elements"</span>: <span class="json-bracket">{</span>
+    <span class="json-key">"section-hero"</span>: <span class="json-bracket">{</span>
+      <span class="json-key">"type"</span>: <span class="json-string">"Hero"</span>,
+      <span class="json-key">"props"</span>: <span class="json-bracket">{</span>
+        <span class="json-key">"title"</span>: <span class="json-string">"Bem-vindo"</span>,
+        <span class="json-key">"subtitle"</span>: <span class="json-string">"Seu site espelhado"</span>
+      <span class="json-bracket">}</span>,
+      <span class="json-key">"children"</span>: [<span class="json-string">"card-1"</span>, <span class="json-string">"card-2"</span>]
+    <span class="json-bracket">}</span>
+  <span class="json-bracket">}</span>
+<span class="json-bracket">}</span>
+    </div>
+    <div class="actions">
+      <button class="btn-outline">Download Original</button>
+      <button class="btn-outline">Copiar</button>
+    </div>
+  </section>
+
+  <footer>Feito com IA &middot; GitHub</footer>
+</body>
+</html>

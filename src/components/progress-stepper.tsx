@@ -99,7 +99,7 @@ function Connector({ status }: { status: "pending" | "complete" | "active" }) {
         "hidden sm:block sm:h-0.5 sm:flex-1",
         "transition-colors duration-300",
         status === "complete" && "bg-green-500",
-        status === "active" && "bg-blue-500 animate-pulse",
+        status === "active" && "bg-[#7DE8EB] animate-pulse",
         status === "pending" && "bg-muted-foreground/20"
       )}
     />
@@ -117,7 +117,7 @@ function ConnectorVertical({
         "sm:hidden w-0.5 h-6 mx-auto",
         "transition-colors duration-300",
         status === "complete" && "bg-green-500",
-        status === "active" && "bg-blue-500 animate-pulse",
+        status === "active" && "bg-[#7DE8EB] animate-pulse",
         status === "pending" && "bg-muted-foreground/20"
       )}
     />
@@ -153,7 +153,7 @@ export function ProgressStepper({ currentStep }: ProgressStepperProps) {
                     status === "pending" &&
                       "border-muted-foreground/30 text-muted-foreground",
                     status === "active" &&
-                      "border-blue-500 text-blue-500 animate-pulse",
+                      "border-[#7DE8EB] text-[#7DE8EB] animate-pulse",
                     status === "complete" &&
                       "border-green-500 bg-green-500/10 text-green-500",
                     status === "error" &&
@@ -166,7 +166,7 @@ export function ProgressStepper({ currentStep }: ProgressStepperProps) {
                   className={cn(
                     "text-sm font-medium transition-colors duration-300",
                     status === "pending" && "text-muted-foreground",
-                    status === "active" && "text-blue-500",
+                    status === "active" && "text-[#7DE8EB]",
                     status === "complete" && "text-green-500",
                     status === "error" && "text-red-500"
                   )}
@@ -197,7 +197,7 @@ export function ProgressStepper({ currentStep }: ProgressStepperProps) {
                     status === "pending" &&
                       "border-muted-foreground/30 text-muted-foreground",
                     status === "active" &&
-                      "border-blue-500 text-blue-500 animate-pulse",
+                      "border-[#7DE8EB] text-[#7DE8EB] animate-pulse",
                     status === "complete" &&
                       "border-green-500 bg-green-500/10 text-green-500",
                     status === "error" &&
@@ -210,7 +210,7 @@ export function ProgressStepper({ currentStep }: ProgressStepperProps) {
                   className={cn(
                     "text-sm font-medium transition-colors duration-300",
                     status === "pending" && "text-muted-foreground",
-                    status === "active" && "text-blue-500",
+                    status === "active" && "text-[#7DE8EB]",
                     status === "complete" && "text-green-500",
                     status === "error" && "text-red-500"
                   )}

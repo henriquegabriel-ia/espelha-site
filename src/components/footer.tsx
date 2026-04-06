@@ -2,7 +2,7 @@ import { Github } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t py-6 mt-auto">
+    <footer className="border-t border-[var(--glass-border)] py-6 mt-auto">
       <div className="max-w-4xl mx-auto flex flex-col items-center gap-2 px-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-4">
           <a

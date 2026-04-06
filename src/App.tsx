@@ -107,10 +107,11 @@ function App() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-12 md:py-20">
-          <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
+        <section className="py-12 md:py-20 relative">
+          <div className="absolute inset-0 gradient-hero pointer-events-none" />
+          <div className="max-w-4xl mx-auto px-4 text-center space-y-6 relative">
             <div className="space-y-3">
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-foreground">
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gradient font-heading leading-[0.92]">
                 Espelha Site
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -290,10 +291,10 @@ function App() {
                 {features.map((feature) => (
                   <Card
                     key={feature.title}
-                    className="transition-colors hover:border-blue-500/50"
+                    className="glass transition-all duration-300 hover:border-[#5BA8AA] hover:shadow-[0_0_40px_rgba(125,232,235,0.08)] hover:-translate-y-0.5"
                   >
                     <CardHeader className="space-y-1">
-                      <feature.icon className="h-8 w-8 text-blue-500 mb-2" />
+                      <feature.icon className="h-8 w-8 text-[#7DE8EB] mb-2" />
                       <CardTitle className="text-xl">{feature.title}</CardTitle>
                     </CardHeader>
                     <CardContent>

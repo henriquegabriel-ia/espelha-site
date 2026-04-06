@@ -81,7 +81,7 @@ export function AnalysisReportView({
       </div>
 
       {/* Positives */}
-      <div className="rounded-lg border-l-4 border-green-500 bg-green-500/20 p-4">
+      <div className="rounded-lg border-l-4 border-green-500 bg-green-500/10 glass p-4">
         <div className="mb-3 flex items-center gap-2">
           <CheckCircle className="h-5 w-5 text-green-500" />
           <h3 className="font-semibold text-green-500">Pontos Positivos</h3>
@@ -96,7 +96,7 @@ export function AnalysisReportView({
       </div>
 
       {/* Negatives */}
-      <div className="rounded-lg border-l-4 border-yellow-500 bg-yellow-500/20 p-4">
+      <div className="rounded-lg border-l-4 border-yellow-500 bg-yellow-500/10 glass p-4">
         <div className="mb-3 flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-yellow-500" />
           <h3 className="font-semibold text-yellow-500">Pontos Negativos</h3>
@@ -111,10 +111,10 @@ export function AnalysisReportView({
       </div>
 
       {/* Suggestions */}
-      <div className="rounded-lg border-l-4 border-blue-500 bg-blue-500/20 p-4">
+      <div className="rounded-lg border-l-4 border-[#7DE8EB] bg-[#7DE8EB]/10 glass p-4">
         <div className="mb-3 flex items-center gap-2">
-          <Lightbulb className="h-5 w-5 text-blue-500" />
-          <h3 className="font-semibold text-blue-500">
+          <Lightbulb className="h-5 w-5 text-[#7DE8EB]" />
+          <h3 className="font-semibold text-[#7DE8EB]">
             Sugestoes de Melhoria
           </h3>
         </div>
