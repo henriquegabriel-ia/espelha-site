@@ -1,14 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link, Search, Sparkles } from "lucide-react";
+import { Link, Search, Sparkles, AlertCircle, RotateCcw } from "lucide-react";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { UrlInput } from "@/components/url-input";
+import { ProviderSelect } from "@/components/provider-select";
+import { ApiKeyInput } from "@/components/api-key-input";
+import { AiProviderBanner } from "@/components/ai-provider-banner";
+import { JsonViewer } from "@/components/json-viewer";
+import { JsonRenderPreview } from "@/components/json-render-preview";
+import { AnalysisReportView } from "@/components/analysis-report";
+import { ResultActions } from "@/components/result-actions";
+import { ProgressStepper } from "@/components/progress-stepper";
+import { useEspelhar } from "@/hooks/use-espelhar";
+import { useProvider } from "@/hooks/use-provider";
 
 function App() {
   const [isDark, setIsDark] = useState(() => {
@@ -35,8 +48,39 @@ function App() {
     }
   }, [isDark]);
 
+  const {
+    provider,
+    apiKey,
+    setProvider,
+    setApiKey,
+    clearApiKey,
+    providerStatus,
+  } = useProvider();
+
+  const {
+    step,
+    jsonRender,
+    analysis,
+    optimizedJson,
+    error,
+    espelhar,
+    generateOptimized,
+    reset,
+  } = useEspelhar();
+
+  const isLoading = step === "scraping" || step === "converting" || step === "analyzing";
+  const isOptimizing = step === "optimizing";
+  const hasStarted = step !== "idle";
+  const hasResults = jsonRender !== null;
+  const hasAnalysis = analysis !== null;
+  const hasOptimized = optimizedJson !== null;
+
   function handleSubmit(url: string) {
-    console.log("URL submetida:", url);
+    espelhar(url);
+  }
+
+  function handleRetry() {
+    reset();
   }
 
   const features = [
@@ -48,12 +92,12 @@ function App() {
     {
       icon: Search,
       title: "Analisa",
-      description: "IA avalia design, SEO, conteúdo e estrutura",
+      description: "IA avalia design, SEO, conteudo e estrutura",
     },
     {
       icon: Sparkles,
       title: "Otimiza",
-      description: "Gera versão melhorada com sugestões aplicadas",
+      description: "Gera versao melhorada com sugestoes aplicadas",
     },
   ];
 
@@ -62,10 +106,10 @@ function App() {
       <Header isDark={isDark} onToggleTheme={toggleTheme} />
 
       <main className="flex-1">
-        {/* Hero */}
-        <section className="py-20 md:py-32">
-          <div className="max-w-4xl mx-auto px-4 text-center space-y-8">
-            <div className="space-y-4">
+        {/* Hero Section */}
+        <section className="py-12 md:py-20">
+          <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
+            <div className="space-y-3">
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-foreground">
                 Espelha Site
               </h1>
@@ -74,39 +118,191 @@ function App() {
               </p>
             </div>
 
+            {/* URL Input */}
             <div className="max-w-xl mx-auto">
               <UrlInput
                 onSubmit={handleSubmit}
-                isLoading={false}
-                disabled={false}
+                isLoading={isLoading}
+                disabled={isOptimizing}
+              />
+            </div>
+
+            {/* Provider + API Key Row */}
+            <div className="max-w-xl mx-auto space-y-3">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <ProviderSelect
+                  provider={provider}
+                  onProviderChange={setProvider}
+                />
+                <div className="flex-1">
+                  <ApiKeyInput
+                    apiKey={apiKey}
+                    onSave={setApiKey}
+                    onClear={clearApiKey}
+                  />
+                </div>
+              </div>
+
+              {/* Provider Banner */}
+              <AiProviderBanner
+                provider={provider}
+                providerStatus={providerStatus}
               />
             </div>
           </div>
         </section>
 
-        {/* Features */}
-        <section className="pb-20">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {features.map((feature) => (
-                <Card
-                  key={feature.title}
-                  className="transition-colors hover:border-blue-500/50"
-                >
-                  <CardHeader className="space-y-1">
-                    <feature.icon className="h-8 w-8 text-blue-500 mb-2" />
-                    <CardTitle className="text-xl">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+        {/* Progress Stepper */}
+        {hasStarted && (
+          <section className="pb-6">
+            <div className="max-w-4xl mx-auto px-4">
+              <ProgressStepper currentStep={step} />
             </div>
-          </div>
-        </section>
+          </section>
+        )}
+
+        {/* Error Alert */}
+        {step === "error" && error && (
+          <section className="pb-6">
+            <div className="max-w-4xl mx-auto px-4">
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription className="flex items-center justify-between gap-4">
+                  <span>{error}</span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleRetry}
+                    className="shrink-0"
+                  >
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    Tentar novamente
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            </div>
+          </section>
+        )}
+
+        {/* Results Section */}
+        {(hasResults || isLoading) && (
+          <section className="pb-8">
+            <div className="max-w-4xl mx-auto px-4 space-y-6">
+              <h2 className="text-2xl font-bold text-foreground">
+                JSON Render
+              </h2>
+
+              <Tabs defaultValue="json" className="w-full">
+                <TabsList>
+                  <TabsTrigger value="json">JSON</TabsTrigger>
+                  <TabsTrigger value="tree">Tree</TabsTrigger>
+                  <TabsTrigger value="preview">Preview</TabsTrigger>
+                </TabsList>
+                <TabsContent value="json">
+                  <JsonViewer
+                    data={jsonRender as unknown as Record<string, unknown> | null}
+                    isLoading={step === "scraping" || step === "converting"}
+                  />
+                </TabsContent>
+                <TabsContent value="tree">
+                  <JsonViewer
+                    data={jsonRender as unknown as Record<string, unknown> | null}
+                    isLoading={step === "scraping" || step === "converting"}
+                  />
+                </TabsContent>
+                <TabsContent value="preview">
+                  <JsonRenderPreview
+                    data={jsonRender}
+                    isLoading={step === "scraping" || step === "converting"}
+                  />
+                </TabsContent>
+              </Tabs>
+
+              {/* Result Actions */}
+              {hasResults && (
+                <ResultActions
+                  originalJson={jsonRender as unknown as Record<string, unknown>}
+                  optimizedJson={hasOptimized ? (optimizedJson as unknown as Record<string, unknown>) : undefined}
+                />
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Analysis Section */}
+        {(hasAnalysis || step === "analyzing") && (
+          <section className="pb-8">
+            <div className="max-w-4xl mx-auto px-4">
+              <AnalysisReportView
+                report={analysis}
+                isLoading={step === "analyzing"}
+                onGenerateOptimized={hasAnalysis ? generateOptimized : undefined}
+                isOptimizing={isOptimizing}
+              />
+            </div>
+          </section>
+        )}
+
+        {/* Optimized Section */}
+        {hasOptimized && (
+          <section className="pb-8">
+            <div className="max-w-4xl mx-auto px-4 space-y-6">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-6 w-6 text-primary" />
+                <h2 className="text-2xl font-bold text-foreground">
+                  JSON Otimizado
+                </h2>
+              </div>
+
+              <Tabs defaultValue="json" className="w-full">
+                <TabsList>
+                  <TabsTrigger value="json">JSON</TabsTrigger>
+                  <TabsTrigger value="tree">Tree</TabsTrigger>
+                  <TabsTrigger value="preview">Preview</TabsTrigger>
+                </TabsList>
+                <TabsContent value="json">
+                  <JsonViewer
+                    data={optimizedJson as unknown as Record<string, unknown>}
+                  />
+                </TabsContent>
+                <TabsContent value="tree">
+                  <JsonViewer
+                    data={optimizedJson as unknown as Record<string, unknown>}
+                  />
+                </TabsContent>
+                <TabsContent value="preview">
+                  <JsonRenderPreview data={optimizedJson} />
+                </TabsContent>
+              </Tabs>
+            </div>
+          </section>
+        )}
+
+        {/* Features Section - only visible when idle */}
+        {!hasStarted && (
+          <section className="pb-20">
+            <div className="max-w-4xl mx-auto px-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {features.map((feature) => (
+                  <Card
+                    key={feature.title}
+                    className="transition-colors hover:border-blue-500/50"
+                  >
+                    <CardHeader className="space-y-1">
+                      <feature.icon className="h-8 w-8 text-blue-500 mb-2" />
+                      <CardTitle className="text-xl">{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />
