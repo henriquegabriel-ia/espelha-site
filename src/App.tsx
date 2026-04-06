@@ -149,6 +149,17 @@ function App() {
                 provider={provider}
                 providerStatus={providerStatus}
               />
+
+              {/* How it works */}
+              <div className="text-left max-w-lg mx-auto mt-4 space-y-2 text-sm text-muted-foreground">
+                <p className="font-medium text-foreground/80">Como funciona:</p>
+                <ol className="list-decimal list-inside space-y-1">
+                  <li>Cole a URL de qualquer site e clique em <strong className="text-foreground">Espelhar</strong></li>
+                  <li>A IA converte a estrutura do site em JSON (<span className="font-mono text-xs">json-render</span>)</li>
+                  <li>Receba uma analise completa: design, SEO, conteudo e estrutura</li>
+                  <li>Baixe o JSON original ou gere uma versao otimizada com as sugestoes da IA</li>
+                </ol>
+              </div>
             </div>
           </div>
         </section>
