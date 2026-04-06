@@ -92,12 +92,12 @@ function App() {
     {
       icon: Search,
       title: "Analisa",
-      description: "IA avalia design, SEO, conteudo e estrutura",
+      description: "IA avalia design, SEO, conteúdo e estrutura",
     },
     {
       icon: Sparkles,
       title: "Otimiza",
-      description: "Gera versao melhorada com sugestoes aplicadas",
+      description: "Gera versão melhorada com sugestões aplicadas",
     },
   ];
 
@@ -156,8 +156,8 @@ function App() {
                 <ol className="list-decimal list-inside space-y-1">
                   <li>Cole a URL de qualquer site e clique em <strong className="text-foreground">Espelhar</strong></li>
                   <li>A IA converte a estrutura do site em JSON (<span className="font-mono text-xs">json-render</span>)</li>
-                  <li>Receba uma analise completa: design, SEO, conteudo e estrutura</li>
-                  <li>Baixe o JSON original ou gere uma versao otimizada com as sugestoes da IA</li>
+                  <li>Receba uma análise completa: design, SEO, conteúdo e estrutura</li>
+                  <li>Baixe o JSON original ou gere uma versão otimizada com as sugestões da IA</li>
                 </ol>
               </div>
             </div>

@@ -361,7 +361,7 @@ export function JsonRenderPreview({ data, isLoading }: JsonRenderPreviewProps) {
           </div>
         ) : (
           <p className="py-8 text-center text-sm text-muted-foreground">
-            Nenhum preview disponivel
+            Nenhum preview disponível
           </p>
         )}
       </div>
