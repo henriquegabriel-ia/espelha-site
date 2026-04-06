@@ -1,3 +1,15 @@
+/**
+ * Edge Function: /scrape
+ *
+ * Receives a URL via POST { url: string }, validates it (format + SSRF blocking),
+ * calls the Firecrawl API to scrape the page, and returns a structured ScrapedPage
+ * response with extracted metadata, headings, links, and images.
+ *
+ * Headers: X-Scrape-Duration reports wall-clock time in milliseconds.
+ * Timeout: 30 seconds for the Firecrawl upstream call.
+ *
+ * Story 2.1 — Production-ready refinement.
+ */
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 
@@ -98,6 +110,8 @@ serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
+
+  const startTime = performance.now();
 
   try {
     // Validate method
@@ -217,9 +231,18 @@ serve(async (req: Request) => {
       images: parseImages(markdown),
     };
 
+    const durationMs = Math.round(performance.now() - startTime);
+    console.log(`[scrape] ${body.url} completed in ${durationMs}ms`);
+
     return new Response(
       JSON.stringify(scrapedPage),
-      { status: 200, headers: JSON_HEADERS }
+      {
+        status: 200,
+        headers: {
+          ...JSON_HEADERS,
+          "X-Scrape-Duration": String(durationMs),
+        },
+      }
     );
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Erro interno desconhecido.";
