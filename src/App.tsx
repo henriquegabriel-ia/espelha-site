@@ -291,10 +291,10 @@ function App() {
                 {features.map((feature) => (
                   <Card
                     key={feature.title}
-                    className="glass transition-all duration-300 hover:border-[#5BA8AA] hover:shadow-[0_0_40px_rgba(125,232,235,0.08)] hover:-translate-y-0.5"
+                    className="glass transition-all duration-300 hover:border-primary/60 hover:shadow-lg hover:-translate-y-0.5"
                   >
                     <CardHeader className="space-y-1">
-                      <feature.icon className="h-8 w-8 text-[#7DE8EB] mb-2" />
+                      <feature.icon className="h-8 w-8 text-primary mb-2" />
                       <CardTitle className="text-xl">{feature.title}</CardTitle>
                     </CardHeader>
                     <CardContent>

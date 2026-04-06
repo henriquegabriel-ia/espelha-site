@@ -11,8 +11,8 @@ export function Header({ isDark, onToggleTheme }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b border-[var(--glass-border)] bg-background/85 backdrop-blur-xl">
       <div className="max-w-4xl mx-auto flex h-14 items-center justify-between px-4">
         <div className="flex items-center gap-2 font-bold text-lg font-heading">
-          <Link className="h-5 w-5 text-[#7DE8EB]" />
-          <span className="text-[#7DE8EB]">Espelha Site</span>
+          <Link className="h-5 w-5 text-primary" />
+          <span className="text-primary">Espelha Site</span>
         </div>
         <Button
           variant="ghost"

@@ -111,10 +111,10 @@ export function AnalysisReportView({
       </div>
 
       {/* Suggestions */}
-      <div className="rounded-lg border-l-4 border-[#7DE8EB] bg-[#7DE8EB]/10 glass p-4">
+      <div className="rounded-lg border-l-4 border-primary bg-primary/10 glass p-4">
         <div className="mb-3 flex items-center gap-2">
-          <Lightbulb className="h-5 w-5 text-[#7DE8EB]" />
-          <h3 className="font-semibold text-[#7DE8EB]">
+          <Lightbulb className="h-5 w-5 text-primary" />
+          <h3 className="font-semibold text-primary">
             Sugestoes de Melhoria
           </h3>
         </div>

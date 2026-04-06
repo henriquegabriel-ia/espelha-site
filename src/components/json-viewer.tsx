@@ -22,17 +22,17 @@ function highlightJson(json: string): string {
   // Tokenize and wrap in colored spans
   return escaped.replace(
     /("(?:\\.|[^"\\])*")\s*:/g, // keys
-    '<span class="text-purple-600 dark:text-[#5BA8AA] font-bold">$1</span>:'
+    '<span class="text-primary/80 font-bold">$1</span>:'
   ).replace(
     /:\s*("(?:\\.|[^"\\])*")/g, // string values
-    ': <span class="text-green-600 dark:text-[#6EE7B7]">$1</span>'
+    ': <span class="text-green-600 dark:text-emerald-300">$1</span>'
   ).replace(
     // standalone string values in arrays (not after colon on same match)
     /(?<=[[,]\s*)("(?:\\.|[^"\\])*")/g,
-    '<span class="text-green-600 dark:text-[#6EE7B7]">$1</span>'
+    '<span class="text-green-600 dark:text-emerald-300">$1</span>'
   ).replace(
     /\b(\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\b/g, // numbers
-    '<span class="text-blue-600 dark:text-[#93C5FD]">$1</span>'
+    '<span class="text-blue-600 dark:text-blue-300">$1</span>'
   ).replace(
     /\b(true|false)\b/g, // booleans
     '<span class="text-yellow-600 dark:text-yellow-400">$1</span>'
@@ -51,7 +51,7 @@ function JsonSyntaxView({ data }: { data: Record<string, unknown> }) {
   const lines = highlighted.split("\n");
 
   return (
-    <div className="relative overflow-auto rounded-md border border-border bg-zinc-100 dark:bg-[#0A1A1A]" role="region" aria-label="JSON code viewer">
+    <div className="relative overflow-auto rounded-md border border-border bg-card" role="region" aria-label="JSON code viewer">
       <pre className="font-mono text-sm leading-6 p-4">
         <code>
           {lines.map((line, i) => (
@@ -87,8 +87,8 @@ function getItemCount(value: unknown): number {
 
 function ValueDisplay({ value }: { value: unknown }) {
   if (value === null) return <span className="text-red-600 dark:text-red-400">null</span>;
-  if (typeof value === "string") return <span className="text-green-600 dark:text-[#6EE7B7]">"{value}"</span>;
-  if (typeof value === "number") return <span className="text-blue-600 dark:text-[#93C5FD]">{String(value)}</span>;
+  if (typeof value === "string") return <span className="text-green-600 dark:text-emerald-300">"{value}"</span>;
+  if (typeof value === "number") return <span className="text-blue-600 dark:text-blue-300">{String(value)}</span>;
   if (typeof value === "boolean") return <span className="text-yellow-600 dark:text-yellow-400">{String(value)}</span>;
   return null;
 }
@@ -130,7 +130,7 @@ function TreeNode({ label, value, defaultExpanded = false, expandAll }: TreeNode
       <button
         type="button"
         onClick={() => setExpanded((prev) => !prev)}
-        className="flex items-center gap-1 py-0.5 hover:bg-zinc-200/50 dark:hover:bg-[#0D2222]/50 rounded w-full text-left"
+        className="flex items-center gap-1 py-0.5 hover:bg-muted/50 rounded w-full text-left"
       >
         {isOpen ? (
           <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -170,19 +170,19 @@ function JsonTreeView({ data }: { data: Record<string, unknown> }) {
   const entries = Object.entries(data);
 
   return (
-    <div className="rounded-md border border-border bg-zinc-100 dark:bg-[#0A1A1A] p-4 font-mono text-sm overflow-auto">
+    <div className="rounded-md border border-border bg-card p-4 font-mono text-sm overflow-auto">
       <div className="flex gap-2 mb-3">
         <button
           type="button"
           onClick={() => { handleExpandAll(); }}
-          className="text-xs px-2 py-1 rounded bg-zinc-200 hover:bg-zinc-300 dark:bg-[#0D2222] dark:hover:bg-[#0D2222]/80 text-foreground transition-colors"
+          className="text-xs px-2 py-1 rounded bg-muted hover:bg-muted/80 text-foreground transition-colors"
         >
           Expandir tudo
         </button>
         <button
           type="button"
           onClick={() => { handleCollapseAll(); }}
-          className="text-xs px-2 py-1 rounded bg-zinc-200 hover:bg-zinc-300 dark:bg-[#0D2222] dark:hover:bg-[#0D2222]/80 text-foreground transition-colors"
+          className="text-xs px-2 py-1 rounded bg-muted hover:bg-muted/80 text-foreground transition-colors"
         >
           Colapsar tudo
         </button>
@@ -190,7 +190,7 @@ function JsonTreeView({ data }: { data: Record<string, unknown> }) {
           <button
             type="button"
             onClick={() => { handleReset(); }}
-            className="text-xs px-2 py-1 rounded bg-zinc-200 hover:bg-zinc-300 dark:bg-[#0D2222] dark:hover:bg-[#0D2222]/80 text-muted-foreground transition-colors"
+            className="text-xs px-2 py-1 rounded bg-muted hover:bg-muted/80 text-muted-foreground transition-colors"
           >
             Reset
           </button>
@@ -215,7 +215,7 @@ function JsonTreeView({ data }: { data: Record<string, unknown> }) {
 
 function JsonViewerSkeleton() {
   return (
-    <div className="space-y-2 p-4 rounded-md border border-border bg-zinc-100 dark:bg-[#0A1A1A]">
+    <div className="space-y-2 p-4 rounded-md border border-border bg-card">
       <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-4 w-1/2" />
       <Skeleton className="h-4 w-5/6" />
@@ -241,7 +241,7 @@ export function JsonViewer({ data, isLoading, mode }: JsonViewerProps) {
 
   if (data === null) {
     return (
-      <div className="flex items-center justify-center rounded-md border border-border bg-zinc-100 dark:bg-[#0A1A1A] p-12">
+      <div className="flex items-center justify-center rounded-md border border-border bg-card p-12">
         <p className="text-muted-foreground">Nenhum JSON para exibir</p>
       </div>
     );

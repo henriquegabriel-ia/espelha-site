@@ -53,13 +53,13 @@ export function UrlInput({ onSubmit, isLoading, disabled }: UrlInputProps) {
             if (error) setError("");
           }}
           disabled={disabled || isLoading}
-          className="flex-1 h-12 text-base glass border-[var(--glass-border)] focus-visible:ring-2 focus-visible:ring-[#7DE8EB] focus-visible:border-[#7DE8EB] focus-visible:shadow-[0_0_20px_rgba(125,232,235,0.15)]"
+          className="flex-1 h-12 text-base glass border-[var(--glass-border)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary focus-visible:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
         />
         <Button
           type="submit"
           size="lg"
           disabled={disabled || isLoading}
-          className="h-12 px-6 active:scale-95 transition-all bg-[#7DE8EB] text-[#071111] hover:bg-[#A0F0F2] hover:shadow-[0_0_30px_rgba(125,232,235,0.3)] hover:-translate-y-px"
+          className="h-12 px-6 active:scale-95 transition-all bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:-translate-y-px"
         >
           {isLoading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
