@@ -1,0 +1,14 @@
+project:
+  name: espelha-site
+  description: "Converte qualquer URL em dados JSON estruturados usando IA"
+  type: web-app
+  repo: henriquegabriel-ia/espelha-site
+  created: "2026-04-05"
+
+workflow:
+  active: greenfield-fullstack
+  phase: 0
+  status: bootstrap-complete
+
+team:
+  owner: henriquegabriel-ia
