@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
-import { corsHeaders } from "../_shared/cors.ts";
+import { getCorsHeaders, corsHeaders } from "../_shared/cors.ts";
 import { resolveProvider } from "../_shared/ai-cascade.ts";
 import { callLLM } from "../_shared/ai-client.ts";
 

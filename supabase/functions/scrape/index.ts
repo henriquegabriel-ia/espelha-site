@@ -11,7 +11,7 @@
  * Story 2.1 — Production-ready refinement.
  */
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
-import { corsHeaders } from "../_shared/cors.ts";
+import { getCorsHeaders, corsHeaders } from "../_shared/cors.ts";
 
 interface ScrapedPage {
   url: string;
