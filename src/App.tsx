@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, Search, Sparkles, AlertCircle, RotateCcw } from "lucide-react";
 import {
   Card,
@@ -23,6 +23,9 @@ import { ProgressStepper } from "@/components/progress-stepper";
 import { DesignSystemView } from "@/components/design-system-view";
 import { useEspelhar } from "@/hooks/use-espelhar";
 import { useProvider } from "@/hooks/use-provider";
+import { useHistory } from "@/hooks/use-history";
+import { HistoryPanel } from "@/components/history-panel";
+import type { HistoryEntry } from "@/hooks/use-history";
 
 function App() {
   const [isDark, setIsDark] = useState(() => {
@@ -60,6 +63,7 @@ function App() {
 
   const {
     step,
+    lastUrl,
     jsonRender,
     analysis,
     optimizedJson,
@@ -68,7 +72,39 @@ function App() {
     espelhar,
     generateOptimized,
     reset,
+    loadFromHistory,
   } = useEspelhar();
+
+  const { history, addToHistory, removeFromHistory, clearHistory } = useHistory();
+
+  // Save to history when espelhamento completes
+  const savedUrlRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (step === 'complete' && jsonRender && lastUrl && lastUrl !== savedUrlRef.current) {
+      savedUrlRef.current = lastUrl;
+      addToHistory({
+        id: Date.now().toString(),
+        url: lastUrl,
+        title: jsonRender.metadata?.title || '',
+        timestamp: new Date().toISOString(),
+        jsonRender: jsonRender as object,
+        designSystem: designSystem ? (designSystem as object) : undefined,
+        analysis: analysis ? (analysis as object) : undefined,
+      });
+    }
+    if (step === 'idle') {
+      savedUrlRef.current = null;
+    }
+  }, [step, jsonRender, lastUrl, designSystem, analysis, addToHistory]);
+
+  function handleHistorySelect(entry: HistoryEntry) {
+    loadFromHistory({
+      url: entry.url,
+      jsonRender: entry.jsonRender,
+      analysis: entry.analysis,
+      designSystem: entry.designSystem,
+    });
+  }
 
   const isLoading = step === "scraping" || step === "converting" || step === "analyzing";
   const isOptimizing = step === "optimizing";
@@ -308,7 +344,7 @@ function App() {
 
         {/* Features Section - only visible when idle */}
         {!hasStarted && (
-          <section className="pb-20">
+          <section className="pb-8">
             <div className="max-w-4xl mx-auto px-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {features.map((feature) => (
@@ -328,6 +364,20 @@ function App() {
                   </Card>
                 ))}
               </div>
+            </div>
+          </section>
+        )}
+
+        {/* History Section - only visible when idle */}
+        {!hasStarted && history.length > 0 && (
+          <section className="pb-20">
+            <div className="max-w-2xl mx-auto px-4">
+              <HistoryPanel
+                history={history}
+                onSelect={handleHistorySelect}
+                onRemove={removeFromHistory}
+                onClear={clearHistory}
+              />
             </div>
           </section>
         )}

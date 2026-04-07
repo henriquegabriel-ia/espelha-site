@@ -7,6 +7,7 @@ export type EspelharStep = 'idle' | 'scraping' | 'converting' | 'analyzing' | 'o
 
 interface EspelharState {
   step: EspelharStep;
+  lastUrl: string | null;
   scrapedData: ScrapedPage | null;
   jsonRender: JsonRenderOutput | null;
   analysis: AnalysisReport | null;
@@ -18,6 +19,7 @@ interface EspelharState {
 
 const initialState: EspelharState = {
   step: 'idle',
+  lastUrl: null,
   scrapedData: null,
   jsonRender: null,
   analysis: null,
@@ -92,7 +94,7 @@ export function useEspelhar() {
   const espelhar = useCallback(async (url: string) => {
     const headers = getHeaders();
 
-    setState({ ...initialState, step: 'scraping' });
+    setState({ ...initialState, step: 'scraping', lastUrl: url });
 
     try {
       // 1. Scrape (timeout 120s — sites grandes como portais podem demorar)
@@ -170,5 +172,24 @@ export function useEspelhar() {
     setState(initialState);
   }, []);
 
-  return { ...state, espelhar, generateOptimized, reset };
+  const loadFromHistory = useCallback((data: {
+    url: string;
+    jsonRender: object;
+    analysis?: object;
+    designSystem?: object;
+  }) => {
+    setState({
+      step: 'complete',
+      lastUrl: data.url,
+      scrapedData: null,
+      jsonRender: data.jsonRender as JsonRenderOutput,
+      analysis: (data.analysis as AnalysisReport) || null,
+      optimizedJson: null,
+      designSystem: (data.designSystem as DesignSystem) || null,
+      error: null,
+      errorStep: null,
+    });
+  }, []);
+
+  return { ...state, espelhar, generateOptimized, reset, loadFromHistory };
 }
