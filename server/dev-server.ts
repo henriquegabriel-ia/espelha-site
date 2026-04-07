@@ -196,7 +196,7 @@ app.post("/functions/v1/scrape", async (req, res) => {
 
     // Call Firecrawl API
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30_000);
+    const timeout = setTimeout(() => controller.abort(), 90_000);
 
     let firecrawlRes: Response;
     try {

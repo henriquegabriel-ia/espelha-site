@@ -95,9 +95,9 @@ export function useEspelhar() {
     setState({ ...initialState, step: 'scraping' });
 
     try {
-      // 1. Scrape (timeout 60s — Firecrawl pode ser lento)
+      // 1. Scrape (timeout 120s — sites grandes como portais podem demorar)
       console.log('[espelhar] Iniciando scrape:', url);
-      const scrapedPage = await invokeFunction('scrape', { url }, headers, 60_000) as ScrapedPage;
+      const scrapedPage = await invokeFunction('scrape', { url }, headers, 120_000) as ScrapedPage;
       console.log('[espelhar] Scrape concluído:', scrapedPage.title);
 
       setState((prev) => ({ ...prev, step: 'converting', scrapedData: scrapedPage }));

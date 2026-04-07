@@ -27,7 +27,7 @@ const steps: StepDef[] = [
     label: "Scraping",
     description: "Extraindo conteúdo do site via Firecrawl...",
     icon: Globe,
-    estimatedSeconds: 30,
+    estimatedSeconds: 45,
   },
   {
     label: "Convertendo",
