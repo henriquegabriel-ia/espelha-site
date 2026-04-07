@@ -29,6 +29,13 @@ app.use(express.json({ limit: "5mb" }));
 // Request logger
 app.use((req, _res, next) => {
   const start = Date.now();
+  // Log AI provider headers for debugging
+  const hasApiKey = !!req.headers["x-api-key"];
+  const provider = req.headers["x-provider"] || "none";
+  const hasServerKey = !!(process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY || process.env.GOOGLE_API_KEY);
+  if (req.method === "POST") {
+    console.log(`[debug] headers x-api-key: ${hasApiKey ? "present" : "missing"}, x-provider: ${provider}, server keys: ${hasServerKey ? "configured" : "MISSING"}`);
+  }
   _res.on("finish", () => {
     const duration = Date.now() - start;
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} — ${_res.statusCode} (${duration}ms)`);
