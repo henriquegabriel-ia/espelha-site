@@ -21,6 +21,7 @@ import { AnalysisReportView } from "@/components/analysis-report";
 import { ResultActions } from "@/components/result-actions";
 import { ProgressStepper } from "@/components/progress-stepper";
 import { DesignSystemView } from "@/components/design-system-view";
+import { LovablePromptButton } from "@/components/lovable-prompt-button";
 import { useEspelhar } from "@/hooks/use-espelhar";
 import { useProvider } from "@/hooks/use-provider";
 import { useHistory } from "@/hooks/use-history";
@@ -273,10 +274,17 @@ function App() {
 
               {/* Result Actions */}
               {hasResults && (
-                <ResultActions
-                  originalJson={jsonRender as unknown as Record<string, unknown>}
-                  optimizedJson={hasOptimized ? (optimizedJson as unknown as Record<string, unknown>) : undefined}
-                />
+                <>
+                  <ResultActions
+                    originalJson={jsonRender as unknown as Record<string, unknown>}
+                    optimizedJson={hasOptimized ? (optimizedJson as unknown as Record<string, unknown>) : undefined}
+                  />
+                  <LovablePromptButton
+                    jsonRender={jsonRender}
+                    designSystem={designSystem}
+                    originalUrl={lastUrl ?? ""}
+                  />
+                </>
               )}
             </div>
           </section>
