@@ -13,7 +13,6 @@ interface EspelharState {
   optimizedJson: JsonRenderOutput | null;
   designSystem: DesignSystem | null;
   error: string | null;
-  /** Tracks which step was active before an error occurred */
   errorStep: EspelharStep | null;
 }
 
@@ -28,12 +27,61 @@ const initialState: EspelharState = {
   errorStep: null,
 };
 
+/**
+ * Invoke a Supabase Edge Function (or local dev server) with timeout.
+ * Extracts error messages from various response formats.
+ */
+async function invokeFunction(
+  fnName: string,
+  body: Record<string, unknown>,
+  headers: Record<string, string>,
+  timeoutMs = 90_000
+): Promise<unknown> {
+  // Race between the actual call and a timeout
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error(
+      `Tempo limite excedido (${Math.round(timeoutMs / 1000)}s) na etapa "${fnName}". Tente com um site menor.`
+    )), timeoutMs);
+  });
+
+  const invokePromise = supabase.functions.invoke(fnName, { body, headers });
+
+  const { data, error } = await Promise.race([invokePromise, timeoutPromise]) as Awaited<typeof invokePromise>;
+
+  // 1. SDK-level error
+  if (error) {
+    const msg = typeof error === 'object' && error !== null && 'message' in error
+      ? (error as { message: string }).message
+      : String(error);
+    throw new Error(msg || `Erro na etapa "${fnName}"`);
+  }
+
+  // 2. Server returned { error: "..." } in body (dev server pattern)
+  if (
+    data &&
+    typeof data === 'object' &&
+    'error' in (data as Record<string, unknown>) &&
+    !('root' in (data as Record<string, unknown>)) &&
+    !('positives' in (data as Record<string, unknown>)) &&
+    !('colors' in (data as Record<string, unknown>))
+  ) {
+    throw new Error((data as { error: string }).error);
+  }
+
+  // 3. Null/empty data
+  if (!data) {
+    throw new Error(`Resposta vazia da etapa "${fnName}". Verifique as configurações.`);
+  }
+
+  return data;
+}
+
 export function useEspelhar() {
   const [state, setState] = useState<EspelharState>(initialState);
   const { provider, apiKey } = useProvider();
 
   const getHeaders = useCallback((): Record<string, string> => {
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    const headers: Record<string, string> = {};
     if (apiKey && provider) {
       headers['x-api-key'] = apiKey;
       headers['x-provider'] = provider;
@@ -44,71 +92,46 @@ export function useEspelhar() {
   const espelhar = useCallback(async (url: string) => {
     const headers = getHeaders();
 
-    // Reset state and start scraping
-    setState({
-      ...initialState,
-      step: 'scraping',
-    });
+    setState({ ...initialState, step: 'scraping' });
 
     try {
-      // 1. Scrape
-      const { data: scrapeData, error: scrapeError } = await supabase.functions.invoke('scrape', {
-        body: { url },
-        headers,
-      });
-      if (scrapeError) throw new Error(scrapeError.message || 'Erro ao fazer scraping do site');
-      const scrapedPage = scrapeData as ScrapedPage;
+      // 1. Scrape (timeout 60s — Firecrawl pode ser lento)
+      console.log('[espelhar] Iniciando scrape:', url);
+      const scrapedPage = await invokeFunction('scrape', { url }, headers, 60_000) as ScrapedPage;
+      console.log('[espelhar] Scrape concluído:', scrapedPage.title);
 
-      setState((prev) => ({
-        ...prev,
-        step: 'converting',
-        scrapedData: scrapedPage,
-      }));
+      setState((prev) => ({ ...prev, step: 'converting', scrapedData: scrapedPage }));
 
-      // 2. Convert + Extract Design System (in parallel)
-      const [convertResult, designSystemResult] = await Promise.all([
-        supabase.functions.invoke('convert', {
-          body: { scrapedData: scrapedPage },
-          headers,
-        }),
-        supabase.functions.invoke('extract-design-system', {
-          body: { scrapedData: scrapedPage },
-          headers,
-        }),
+      // 2. Convert + Extract Design System (em paralelo, timeout 90s cada)
+      console.log('[espelhar] Iniciando convert + design system em paralelo');
+      const [jsonRender, designSystem] = await Promise.all([
+        invokeFunction('convert', { scrapedData: scrapedPage }, headers, 90_000) as Promise<JsonRenderOutput>,
+        invokeFunction('extract-design-system', { scrapedData: scrapedPage }, headers, 90_000)
+          .then((ds) => ds as DesignSystem)
+          .catch((err) => {
+            console.warn('[espelhar] Design system extraction failed (non-blocking):', err.message);
+            return null;
+          }),
       ]);
+      console.log('[espelhar] Convert concluído');
 
-      if (convertResult.error) throw new Error(convertResult.error.message || 'Erro ao converter para JSON Render');
-      const jsonRender = convertResult.data as JsonRenderOutput;
+      setState((prev) => ({ ...prev, step: 'analyzing', jsonRender, designSystem }));
 
-      // Design system extraction is non-blocking: if it fails, we continue without it
-      const designSystem = designSystemResult.error ? null : designSystemResult.data as DesignSystem;
+      // 3. Analyze (timeout 90s)
+      console.log('[espelhar] Iniciando análise');
+      const analysis = await invokeFunction('analyze', { jsonRender, originalUrl: url }, headers, 90_000) as AnalysisReport;
+      console.log('[espelhar] Análise concluída');
 
-      setState((prev) => ({
-        ...prev,
-        step: 'analyzing',
-        jsonRender,
-        designSystem,
-      }));
+      setState((prev) => ({ ...prev, step: 'complete', analysis }));
 
-      // 3. Analyze
-      const { data: analyzeData, error: analyzeError } = await supabase.functions.invoke('analyze', {
-        body: { jsonRender },
-        headers,
-      });
-      if (analyzeError) throw new Error(analyzeError.message || 'Erro ao analisar o site');
-      const analysis = analyzeData as AnalysisReport;
-
-      setState((prev) => ({
-        ...prev,
-        step: 'complete',
-        analysis,
-      }));
     } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro desconhecido';
+      console.error('[espelhar] Erro:', message);
       setState((prev) => ({
         ...prev,
         step: 'error',
         errorStep: prev.step,
-        error: err instanceof Error ? err.message : 'Erro desconhecido',
+        error: message,
       }));
     }
   }, [getHeaders]);
@@ -116,35 +139,24 @@ export function useEspelhar() {
   const generateOptimized = useCallback(async () => {
     const headers = getHeaders();
 
-    setState((prev) => ({
-      ...prev,
-      step: 'optimizing',
-      error: null,
-      errorStep: null,
-    }));
+    setState((prev) => ({ ...prev, step: 'optimizing', error: null, errorStep: null }));
 
     try {
-      const { data: optimizeData, error: optimizeError } = await supabase.functions.invoke('optimize', {
-        body: {
-          jsonRender: state.jsonRender,
-          suggestions: state.analysis?.suggestions,
-        },
+      const optimizedJson = await invokeFunction(
+        'optimize',
+        { jsonRender: state.jsonRender, suggestions: state.analysis?.suggestions },
         headers,
-      });
-      if (optimizeError) throw new Error(optimizeError.message || 'Erro ao otimizar o JSON');
-      const optimizedJson = optimizeData as JsonRenderOutput;
+        90_000
+      ) as JsonRenderOutput;
 
-      setState((prev) => ({
-        ...prev,
-        step: 'complete',
-        optimizedJson,
-      }));
+      setState((prev) => ({ ...prev, step: 'complete', optimizedJson }));
     } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro desconhecido';
       setState((prev) => ({
         ...prev,
         step: 'error',
         errorStep: 'optimizing',
-        error: err instanceof Error ? err.message : 'Erro desconhecido',
+        error: message,
       }));
     }
   }, [getHeaders, state.jsonRender, state.analysis]);
@@ -153,10 +165,5 @@ export function useEspelhar() {
     setState(initialState);
   }, []);
 
-  return {
-    ...state,
-    espelhar,
-    generateOptimized,
-    reset,
-  };
+  return { ...state, espelhar, generateOptimized, reset };
 }

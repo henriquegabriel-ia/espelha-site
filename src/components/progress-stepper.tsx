@@ -25,21 +25,21 @@ interface StepDef {
 const steps: StepDef[] = [
   {
     label: "Scraping",
-    description: "Extraindo conteúdo do site...",
+    description: "Extraindo conteúdo do site via Firecrawl...",
     icon: Globe,
-    estimatedSeconds: 10,
+    estimatedSeconds: 30,
   },
   {
     label: "Convertendo",
-    description: "IA estruturando em JSON...",
+    description: "IA convertendo estrutura para JSON + extraindo design system...",
     icon: Code,
-    estimatedSeconds: 15,
+    estimatedSeconds: 60,
   },
   {
     label: "Analisando",
-    description: "IA avaliando design, SEO, conteúdo...",
+    description: "IA avaliando design, SEO, conteúdo e estrutura...",
     icon: Search,
-    estimatedSeconds: 15,
+    estimatedSeconds: 45,
   },
 ];
 
