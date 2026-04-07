@@ -294,29 +294,38 @@ Page footer with text and optional links
 
 O JSON de saida deve seguir exatamente o mesmo formato do JSON de entrada.`;
 
-export const EXTRACT_DESIGN_SYSTEM_PROMPT = `Voce e um especialista em Design Systems. Analise o conteudo do site fornecido e extraia os Design Tokens (paleta de cores, tipografia, espacamentos).
+export const EXTRACT_DESIGN_SYSTEM_PROMPT = `Voce e um especialista em Design Systems. Sua tarefa e EXTRAIR os Design Tokens REAIS do site fornecido analisando o HTML e CSS.
+
+REGRAS CRITICAS:
+- Extraia APENAS cores que REALMENTE existem no HTML/CSS fornecido (inline styles, classes CSS, CSS variables, style tags)
+- NUNCA invente ou estime cores. Se nao encontrar uma cor especifica, NAO a inclua.
+- Procure por: style="color:...", style="background:...", class="bg-...", class="text-...", CSS custom properties (--color-*), <style> tags
+- Para Tailwind CSS: converta classes como "bg-blue-600" para o hex correspondente (#2563EB), "text-gray-900" para #111827, etc.
+- Para cores em RGB, HSL ou HEX no HTML/CSS, extraia o valor exato
+- A cor PRIMARY e a cor mais usada em botoes, CTAs e elementos de destaque
+- A cor SECONDARY e a segunda cor de destaque
+- Background e a cor de fundo principal do body/main
+- Analise tambem as fontes usadas (font-family no CSS/inline styles, Google Fonts links, @font-face)
 
 Retorne APENAS JSON valido com esta estrutura:
 {
   "colors": [
-    { "name": "Primary", "hex": "#...", "rgb": "rgb(...)", "usage": "descricao" },
-    ...
+    { "name": "Primary", "hex": "#...", "rgb": "rgb(...)", "usage": "onde essa cor aparece no site" }
   ],
   "typography": [
-    { "name": "Heading 1", "fontFamily": "...", "fontSize": "...", "fontWeight": "...", "lineHeight": "...", "usage": "descricao" },
-    ...
+    { "name": "Heading 1", "fontFamily": "...", "fontSize": "...", "fontWeight": "...", "lineHeight": "...", "usage": "onde essa tipografia aparece" }
   ],
   "spacing": [
-    { "name": "xs", "value": "4px" },
-    { "name": "sm", "value": "8px" },
-    ...
+    { "name": "sm", "value": "8px" }
   ],
-  "borderRadius": ["4px", "8px", "16px"],
-  "shadows": ["0 1px 3px rgba(0,0,0,0.1)", ...],
-  "cssVariables": { "--primary": "#...", ... }
+  "borderRadius": ["4px", "8px"],
+  "shadows": ["0 1px 3px rgba(0,0,0,0.1)"],
+  "cssVariables": { "--primary": "#..." }
 }
 
-Extraia entre 6-12 cores, 4-8 tipografias, 4-6 espacamentos.
-Identifique padroes visuais do site: se e dark theme, se usa gradientes, se e minimalista, etc.
-Para cores, inclua sempre: primary, secondary, background, surface, text-primary, text-secondary, accent, border.
-Se nao conseguir identificar um token especifico, faca sua melhor estimativa baseada no conteudo.`;
+- Inclua entre 6-12 cores que REALMENTE existem no site
+- Inclua 3-6 tipografias encontradas
+- Inclua 3-5 espacamentos encontrados
+- Se o site usa Tailwind CSS, extraia os valores reais das classes
+- Se nao encontrar CSS custom properties, retorne cssVariables como objeto vazio {}
+- NUNCA retorne cores que voce nao encontrou explicitamente no HTML/CSS fornecido`;

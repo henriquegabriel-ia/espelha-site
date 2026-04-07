@@ -248,12 +248,14 @@ app.post("/functions/v1/scrape", async (req, res) => {
     const data = firecrawlData.data ?? firecrawlData;
     const metadata = data.metadata ?? {};
     const markdown = data.markdown ?? "";
+    const html = data.html ?? "";
 
-    const scrapedPage: ScrapedPage = {
+    const scrapedPage: ScrapedPage & { html?: string } = {
       url,
       title: metadata.title ?? "",
       description: metadata.description ?? "",
       textContent: markdown,
+      html: html.substring(0, 30000), // Cap HTML at 30KB for design system extraction
       metadata: {
         ogTitle: metadata.ogTitle ?? metadata["og:title"] ?? undefined,
         ogDescription: metadata.ogDescription ?? metadata["og:description"] ?? undefined,
@@ -690,35 +692,33 @@ app.post("/functions/v1/optimize", async (req, res) => {
 // POST /functions/v1/extract-design-system
 // ---------------------------------------------------------------------------
 
-function buildDesignSystemUserPrompt(data: ScrapedData): string {
+function buildDesignSystemUserPrompt(data: ScrapedData & { html?: string }): string {
   const parts: string[] = [];
 
   parts.push(`# Website: ${data.title}`);
   if (data.description) parts.push(`Description: ${data.description}`);
   if (data.url) parts.push(`URL: ${data.url}`);
 
-  if (data.metadata && Object.keys(data.metadata).length > 0) {
-    parts.push(`\n## Metadata\n${JSON.stringify(data.metadata, null, 2)}`);
-  }
-
-  if (data.headings && data.headings.length > 0) {
-    parts.push("\n## Headings");
-    for (const h of data.headings) {
-      parts.push(`${"#".repeat(h.level)} ${h.text}`);
-    }
+  // HTML is the PRIMARY source for design token extraction
+  if (data.html) {
+    const maxHtml = 25_000;
+    const html = data.html.length > maxHtml
+      ? data.html.slice(0, maxHtml) + "\n... [HTML truncated]"
+      : data.html;
+    parts.push(`\n## HTML (fonte principal — extraia cores, fontes e estilos daqui)\n${html}`);
   }
 
   if (data.textContent) {
-    const maxChars = 12_000;
+    const maxChars = 5_000;
     const text =
       data.textContent.length > maxChars
         ? data.textContent.slice(0, maxChars) + "\n... [truncated]"
         : data.textContent;
-    parts.push(`\n## Page Text Content\n${text}`);
+    parts.push(`\n## Page Text Content (referencia)\n${text}`);
   }
 
   parts.push(
-    "\n---\nAnalise o conteudo acima e extraia os Design Tokens do site. Retorne APENAS o JSON.",
+    "\n---\nExtraia os Design Tokens REAIS do HTML/CSS acima. Cores devem ser EXATAMENTE as encontradas no codigo. Retorne APENAS o JSON.",
   );
 
   return parts.join("\n");

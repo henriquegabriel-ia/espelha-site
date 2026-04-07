@@ -117,10 +117,15 @@ export function useEspelhar() {
 
       setState((prev) => ({ ...prev, step: 'analyzing', jsonRender, designSystem }));
 
-      // 3. Analyze (timeout 90s)
+      // 3. Analyze (timeout 120s) — non-blocking, se falhar mostra resultados parciais
       console.log('[espelhar] Iniciando análise');
-      const analysis = await invokeFunction('analyze', { jsonRender, originalUrl: url }, headers, 90_000) as AnalysisReport;
-      console.log('[espelhar] Análise concluída');
+      let analysis: AnalysisReport | null = null;
+      try {
+        analysis = await invokeFunction('analyze', { jsonRender, originalUrl: url }, headers, 120_000) as AnalysisReport;
+        console.log('[espelhar] Análise concluída');
+      } catch (analyzeErr) {
+        console.warn('[espelhar] Análise falhou (non-blocking):', analyzeErr instanceof Error ? analyzeErr.message : analyzeErr);
+      }
 
       setState((prev) => ({ ...prev, step: 'complete', analysis }));
 
