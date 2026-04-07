@@ -320,7 +320,11 @@ export function DesignSystemView({
     return null;
   }
 
-  const { colors, typography, spacing, borderRadius, shadows } = designSystem;
+  const colors = designSystem.colors ?? [];
+  const typography = designSystem.typography ?? [];
+  const spacing = designSystem.spacing ?? [];
+  const borderRadius = designSystem.borderRadius ?? [];
+  const shadows = designSystem.shadows ?? [];
 
   const maxSpacingPx = spacing.reduce(
     (max, s) => Math.max(max, parseToPx(s.value)),
@@ -330,8 +334,8 @@ export function DesignSystemView({
   const hasColors = colors.length > 0;
   const hasTypography = typography.length > 0;
   const hasSpacing = spacing.length > 0;
-  const hasBorderRadius = borderRadius && borderRadius.length > 0;
-  const hasShadows = shadows && shadows.length > 0;
+  const hasBorderRadius = borderRadius.length > 0;
+  const hasShadows = shadows.length > 0;
 
   return (
     <div className="space-y-8">

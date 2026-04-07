@@ -87,7 +87,7 @@ export function AnalysisReportView({
           <h3 className="font-semibold text-green-500">Pontos Positivos</h3>
         </div>
         <ul className="space-y-1.5 pl-7">
-          {report.positives.map((item, index) => (
+          {(report.positives ?? []).map((item, index) => (
             <li key={index} className="list-disc text-sm">
               {item}
             </li>
@@ -102,7 +102,7 @@ export function AnalysisReportView({
           <h3 className="font-semibold text-yellow-500">Pontos Negativos</h3>
         </div>
         <ul className="space-y-1.5 pl-7">
-          {report.negatives.map((item, index) => (
+          {(report.negatives ?? []).map((item, index) => (
             <li key={index} className="list-disc text-sm">
               {item}
             </li>
@@ -119,7 +119,7 @@ export function AnalysisReportView({
           </h3>
         </div>
         <div className="space-y-3">
-          {report.suggestions.map((suggestion, index) => (
+          {(report.suggestions ?? []).map((suggestion, index) => (
             <div
               key={index}
               className="rounded-md border border-border/40 bg-background/50 p-3"

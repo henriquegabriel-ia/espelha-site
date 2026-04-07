@@ -355,7 +355,7 @@ export function JsonRenderPreview({ data, isLoading }: JsonRenderPreviewProps) {
       <div className="max-h-[600px] overflow-y-auto p-4">
         {isLoading ? (
           <PreviewSkeleton />
-        ) : data ? (
+        ) : data && data.root && data.elements ? (
           <div className="space-y-4">
             {renderElement(data.root, data.elements)}
           </div>
