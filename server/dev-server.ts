@@ -6,6 +6,7 @@
 //   POST /functions/v1/convert
 //   POST /functions/v1/analyze
 //   POST /functions/v1/optimize
+//   POST /functions/v1/extract-design-system
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -13,7 +14,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import { resolveProvider, callLLM } from "./ai-client.js";
-import { CONVERT_SYSTEM_PROMPT, ANALYZE_SYSTEM_PROMPT, OPTIMIZE_SYSTEM_PROMPT } from "./prompts.js";
+import { CONVERT_SYSTEM_PROMPT, ANALYZE_SYSTEM_PROMPT, OPTIMIZE_SYSTEM_PROMPT, EXTRACT_DESIGN_SYSTEM_PROMPT } from "./prompts.js";
 
 const app = express();
 const PORT = 3001;
@@ -679,6 +680,128 @@ app.post("/functions/v1/optimize", async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// POST /functions/v1/extract-design-system
+// ---------------------------------------------------------------------------
+
+function buildDesignSystemUserPrompt(data: ScrapedData): string {
+  const parts: string[] = [];
+
+  parts.push(`# Website: ${data.title}`);
+  if (data.description) parts.push(`Description: ${data.description}`);
+  if (data.url) parts.push(`URL: ${data.url}`);
+
+  if (data.metadata && Object.keys(data.metadata).length > 0) {
+    parts.push(`\n## Metadata\n${JSON.stringify(data.metadata, null, 2)}`);
+  }
+
+  if (data.headings && data.headings.length > 0) {
+    parts.push("\n## Headings");
+    for (const h of data.headings) {
+      parts.push(`${"#".repeat(h.level)} ${h.text}`);
+    }
+  }
+
+  if (data.textContent) {
+    const maxChars = 12_000;
+    const text =
+      data.textContent.length > maxChars
+        ? data.textContent.slice(0, maxChars) + "\n... [truncated]"
+        : data.textContent;
+    parts.push(`\n## Page Text Content\n${text}`);
+  }
+
+  parts.push(
+    "\n---\nAnalise o conteudo acima e extraia os Design Tokens do site. Retorne APENAS o JSON.",
+  );
+
+  return parts.join("\n");
+}
+
+app.post("/functions/v1/extract-design-system", async (req, res) => {
+  try {
+    const scrapedData: ScrapedData | undefined = req.body?.scrapedData;
+    if (!scrapedData || typeof scrapedData.title !== "string" || typeof scrapedData.textContent !== "string") {
+      return errorJson(
+        res,
+        "Dados de scraping ausentes ou invalidos. Campos obrigatorios: title (string), textContent (string).",
+        400,
+      );
+    }
+
+    let resolvedProvider;
+    try {
+      resolvedProvider = resolveProvider(req.headers);
+    } catch {
+      return errorJson(res, "Nenhum provider de IA disponivel. Configure uma API key.", 400);
+    }
+
+    const userPrompt = buildDesignSystemUserPrompt(scrapedData);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 60_000);
+
+    let llmResponse;
+    try {
+      llmResponse = await callLLM({
+        provider: resolvedProvider,
+        systemPrompt: EXTRACT_DESIGN_SYSTEM_PROMPT,
+        userPrompt,
+        jsonMode: true,
+        maxTokens: 4096,
+        signal: controller.signal,
+      });
+    } catch (err) {
+      clearTimeout(timeout);
+      if (err instanceof DOMException && err.name === "AbortError") {
+        return errorJson(res, "Tempo limite excedido. O site pode ser muito grande ou lento.", 504);
+      }
+      console.error("LLM call failed:", err);
+      return errorJson(res, "Erro na extracao de design tokens. Tente novamente.", 502);
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    let parsed: Record<string, unknown>;
+    try {
+      parsed = JSON.parse(llmResponse.content);
+    } catch {
+      console.error("Failed to parse LLM JSON:", llmResponse.content.slice(0, 500));
+      const partialMatch = llmResponse.content.match(/\{[\s\S]*\}/);
+      if (partialMatch) {
+        try {
+          parsed = JSON.parse(partialMatch[0]);
+        } catch {
+          return errorJson(res, "A resposta da IA foi truncada. Tente novamente ou use um modelo com mais capacidade.", 502);
+        }
+      } else {
+        return errorJson(res, "A resposta da IA foi truncada. Tente novamente ou use um modelo com mais capacidade.", 502);
+      }
+    }
+
+    if (!Array.isArray(parsed!.colors) || !Array.isArray(parsed!.typography) || !Array.isArray(parsed!.spacing)) {
+      return errorJson(
+        res,
+        "A resposta da IA nao corresponde ao formato esperado (colors, typography, spacing). Tente novamente.",
+        502,
+      );
+    }
+
+    return res.json({
+      ...parsed,
+      meta: {
+        provider: llmResponse.provider,
+        model: llmResponse.model,
+        usage: llmResponse.usage,
+        extractedAt: new Date().toISOString(),
+      },
+    });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Erro interno desconhecido.";
+    return errorJson(res, message, 500);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Start
 // ---------------------------------------------------------------------------
 
@@ -690,5 +813,6 @@ app.listen(PORT, () => {
   console.log(`    POST /functions/v1/convert`);
   console.log(`    POST /functions/v1/analyze`);
   console.log(`    POST /functions/v1/optimize`);
+  console.log(`    POST /functions/v1/extract-design-system`);
   console.log();
 });

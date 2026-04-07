@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import type { ScrapedPage, JsonRenderOutput, AnalysisReport } from '@/types/espelhar';
+import type { ScrapedPage, JsonRenderOutput, AnalysisReport, DesignSystem } from '@/types/espelhar';
 import { useProvider } from './use-provider';
 
 export type EspelharStep = 'idle' | 'scraping' | 'converting' | 'analyzing' | 'optimizing' | 'complete' | 'error';
@@ -11,6 +11,7 @@ interface EspelharState {
   jsonRender: JsonRenderOutput | null;
   analysis: AnalysisReport | null;
   optimizedJson: JsonRenderOutput | null;
+  designSystem: DesignSystem | null;
   error: string | null;
   /** Tracks which step was active before an error occurred */
   errorStep: EspelharStep | null;
@@ -22,6 +23,7 @@ const initialState: EspelharState = {
   jsonRender: null,
   analysis: null,
   optimizedJson: null,
+  designSystem: null,
   error: null,
   errorStep: null,
 };
@@ -63,18 +65,29 @@ export function useEspelhar() {
         scrapedData: scrapedPage,
       }));
 
-      // 2. Convert
-      const { data: convertData, error: convertError } = await supabase.functions.invoke('convert', {
-        body: { scrapedData: scrapedPage },
-        headers,
-      });
-      if (convertError) throw new Error(convertError.message || 'Erro ao converter para JSON Render');
-      const jsonRender = convertData as JsonRenderOutput;
+      // 2. Convert + Extract Design System (in parallel)
+      const [convertResult, designSystemResult] = await Promise.all([
+        supabase.functions.invoke('convert', {
+          body: { scrapedData: scrapedPage },
+          headers,
+        }),
+        supabase.functions.invoke('extract-design-system', {
+          body: { scrapedData: scrapedPage },
+          headers,
+        }),
+      ]);
+
+      if (convertResult.error) throw new Error(convertResult.error.message || 'Erro ao converter para JSON Render');
+      const jsonRender = convertResult.data as JsonRenderOutput;
+
+      // Design system extraction is non-blocking: if it fails, we continue without it
+      const designSystem = designSystemResult.error ? null : designSystemResult.data as DesignSystem;
 
       setState((prev) => ({
         ...prev,
         step: 'analyzing',
         jsonRender,
+        designSystem,
       }));
 
       // 3. Analyze

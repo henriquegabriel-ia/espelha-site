@@ -20,6 +20,7 @@ import { JsonRenderPreview } from "@/components/json-render-preview";
 import { AnalysisReportView } from "@/components/analysis-report";
 import { ResultActions } from "@/components/result-actions";
 import { ProgressStepper } from "@/components/progress-stepper";
+import { DesignSystemView } from "@/components/design-system-view";
 import { useEspelhar } from "@/hooks/use-espelhar";
 import { useProvider } from "@/hooks/use-provider";
 
@@ -62,6 +63,7 @@ function App() {
     jsonRender,
     analysis,
     optimizedJson,
+    designSystem,
     error,
     espelhar,
     generateOptimized,
@@ -74,6 +76,7 @@ function App() {
   const hasResults = jsonRender !== null;
   const hasAnalysis = analysis !== null;
   const hasOptimized = optimizedJson !== null;
+  const hasDesignSystem = designSystem !== null;
 
   function handleSubmit(url: string) {
     espelhar(url);
@@ -253,6 +256,15 @@ function App() {
                 onGenerateOptimized={hasAnalysis ? generateOptimized : undefined}
                 isOptimizing={isOptimizing}
               />
+            </div>
+          </section>
+        )}
+
+        {/* Design System Section */}
+        {hasDesignSystem && (
+          <section className="pb-8 animate-slide-up">
+            <div className="max-w-4xl mx-auto px-4">
+              <DesignSystemView designSystem={designSystem} />
             </div>
           </section>
         )}

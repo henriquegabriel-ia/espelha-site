@@ -293,3 +293,30 @@ Page footer with text and optional links
 | links | \`Array<{ text: string; href: string }>\` | no |
 
 O JSON de saida deve seguir exatamente o mesmo formato do JSON de entrada.`;
+
+export const EXTRACT_DESIGN_SYSTEM_PROMPT = `Voce e um especialista em Design Systems. Analise o conteudo do site fornecido e extraia os Design Tokens (paleta de cores, tipografia, espacamentos).
+
+Retorne APENAS JSON valido com esta estrutura:
+{
+  "colors": [
+    { "name": "Primary", "hex": "#...", "rgb": "rgb(...)", "usage": "descricao" },
+    ...
+  ],
+  "typography": [
+    { "name": "Heading 1", "fontFamily": "...", "fontSize": "...", "fontWeight": "...", "lineHeight": "...", "usage": "descricao" },
+    ...
+  ],
+  "spacing": [
+    { "name": "xs", "value": "4px" },
+    { "name": "sm", "value": "8px" },
+    ...
+  ],
+  "borderRadius": ["4px", "8px", "16px"],
+  "shadows": ["0 1px 3px rgba(0,0,0,0.1)", ...],
+  "cssVariables": { "--primary": "#...", ... }
+}
+
+Extraia entre 6-12 cores, 4-8 tipografias, 4-6 espacamentos.
+Identifique padroes visuais do site: se e dark theme, se usa gradientes, se e minimalista, etc.
+Para cores, inclua sempre: primary, secondary, background, surface, text-primary, text-secondary, accent, border.
+Se nao conseguir identificar um token especifico, faca sua melhor estimativa baseada no conteudo.`;
