@@ -29,7 +29,7 @@ Implementar o sistema de selecao de provider de IA e input de API key propria (B
 - Configuracoes avancadas de provider (modelo, temperatura, etc.)
 
 ## Technical Notes
-- localStorage keys: `espelha_provider`, `espelha_key_openai`, `espelha_key_anthropic`, `espelha_key_gemini`
+- localStorage keys: `clonador_provider`, `clonador_key_openai`, `clonador_key_anthropic`, `clonador_key_gemini`
 - Hook useProvider deve expor: `{ provider, setProvider, apiKey, setApiKey, isConfigured, providerLabel }`
 - Usar shadcn/ui Select para dropdown, Input para key, Alert/Banner para status
 - API key masks: mostrar apenas ultimos 4 chars quando salva (sk-...xxxx)

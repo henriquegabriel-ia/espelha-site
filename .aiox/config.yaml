@@ -1,8 +1,8 @@
 project:
-  name: espelha-site
+  name: clonador-de-sites
   description: "Converte qualquer URL em dados JSON estruturados usando IA"
   type: web-app
-  repo: henriquegabriel-ia/espelha-site
+  repo: henriquegabriel-ia/clonador-de-sites
   created: "2026-04-05"
 
 workflow:

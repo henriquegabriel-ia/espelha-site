@@ -3,7 +3,7 @@
 ## Status: Draft
 
 ## Descricao
-Configurar o Supabase como backend do Espelha Site, incluindo o client no frontend e a estrutura base das 4 Edge Functions que formarao o pipeline de processamento (scrape, convert, analyze, optimize). Estabelecer os tipos compartilhados entre frontend e backend para garantir type-safety end-to-end.
+Configurar o Supabase como backend do Clonador de Sites, incluindo o client no frontend e a estrutura base das 4 Edge Functions que formarao o pipeline de processamento (scrape, convert, analyze, optimize). Estabelecer os tipos compartilhados entre frontend e backend para garantir type-safety end-to-end.
 
 ## Acceptance Criteria
 - [ ] Given o Supabase client configurado, When chamar `supabase.functions.invoke('scrape')`, Then a requisicao chega na Edge Function e retorna 200

@@ -3,10 +3,10 @@
 ## Status: Ready
 
 ## Descricao
-Criar o componente ProgressStepper que mostra o progresso do fluxo de espelhamento em 3 etapas: Scraping, Convertendo e Analisando. Cada step tem indicador visual de estado (ativo, completo, pendente) com animacao de transicao. O stepper da feedback claro ao usuario sobre o que esta acontecendo enquanto aguarda o resultado.
+Criar o componente ProgressStepper que mostra o progresso do fluxo de clonagem em 3 etapas: Scraping, Convertendo e Analisando. Cada step tem indicador visual de estado (ativo, completo, pendente) com animacao de transicao. O stepper da feedback claro ao usuario sobre o que esta acontecendo enquanto aguarda o resultado.
 
 ## Acceptance Criteria
-- [ ] Given o processo de espelhamento iniciou, When o usuario visualiza o ProgressStepper, Then deve ver 3 steps: "Scraping", "Convertendo", "Analisando"
+- [ ] Given o processo de clonagem iniciou, When o usuario visualiza o ProgressStepper, Then deve ver 3 steps: "Scraping", "Convertendo", "Analisando"
 - [ ] Given o step atual e "Scraping", When o usuario observa, Then o step 1 deve estar no estado "ativo" (highlight), steps 2 e 3 no estado "pendente" (dimmed)
 - [ ] Given o step "Scraping" completou, When transita para "Convertendo", Then o step 1 deve mudar para "completo" (check icon) e step 2 para "ativo" com animacao de transicao
 - [ ] Given todos os steps completaram, When o usuario observa, Then todos os 3 steps devem estar no estado "completo" com icone de check

@@ -3,8 +3,8 @@ import { useState, useCallback, useMemo } from "react";
 export type Provider = "openai" | "anthropic" | "gemini";
 export type ProviderStatus = "byo" | "lovable-ai" | "none";
 
-const STORAGE_KEY_PROVIDER = "espelha-provider";
-const STORAGE_KEY_API_KEY = "espelha-api-key";
+const STORAGE_KEY_PROVIDER = "clonador-provider";
+const STORAGE_KEY_API_KEY = "clonador-api-key";
 
 function readFromStorage(key: string): string {
   try {

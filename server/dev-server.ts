@@ -813,7 +813,7 @@ app.post("/functions/v1/extract-design-system", async (req, res) => {
 // ---------------------------------------------------------------------------
 
 app.listen(PORT, () => {
-  console.log(`\n  Espelha Dev Server running at http://localhost:${PORT}`);
+  console.log(`\n  Clonador Dev Server running at http://localhost:${PORT}`);
   console.log(`  CORS enabled for http://localhost:5173`);
   console.log(`\n  Routes:`);
   console.log(`    POST /functions/v1/scrape`);

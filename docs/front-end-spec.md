@@ -1,4 +1,4 @@
-# Front-End Specification: Espelha Site
+# Front-End Specification: Clonador de Sites
 
 ## 1. Design System
 
@@ -44,8 +44,8 @@
 ```
 ┌─────────────────────────────────────┐
 │                                     │
-│     🔗 Espelha Site                │
-│     Espelhe qualquer site.          │
+│     🔗 Clonador de Sites           │
+│     Clone qualquer site.            │
 │     Analise. Otimize. Copie.        │
 │                                     │
 │  ┌─────────────────────────┐ ┌────┐ │
@@ -58,7 +58,7 @@
 └─────────────────────────────────────┘
 ```
 
-**Seção 2: Resultado (após espelhar)**
+**Seção 2: Resultado (após clonar)**
 ```
 ┌─────────────────────────────────────┐
 │ Tabs: [JSON] [Tree] [Preview]       │
@@ -108,7 +108,7 @@
 ```
 ┌───────┐ ┌───────┐ ┌───────┐
 │  🔗   │ │  🤖   │ │  ✨   │
-│Espelha│ │Analisa│ │Otimiza│
+│Clona  │ │Analisa│ │Otimiza│
 └───────┘ └───────┘ └───────┘
 ```
 
@@ -116,7 +116,7 @@
 
 ### `<UrlInput />`
 - Input com validação de URL
-- Botão "Espelhar" com loading state
+- Botão "Clonar" com loading state
 - Estado: idle → loading → success/error
 
 ### `<ProviderSelect />`
@@ -160,7 +160,7 @@
 
 ```
 IDLE
-  └── User cola URL e clica "Espelhar"
+  └── User cola URL e clica "Clonar"
 SCRAPING
   └── Firecrawl extraindo conteúdo
 CONVERTING

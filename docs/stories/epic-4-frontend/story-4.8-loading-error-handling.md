@@ -3,17 +3,17 @@
 ## Status: Ready
 
 ## Descricao
-Implementar os estados de loading (skeletons) e tratamento de erros (toasts) em toda a aplicacao. Inclui skeleton loading para o JSON viewer e relatorio de analise, toasts de erro com mensagens contextuais e retry, e empty state para quando nenhuma URL foi espelhada. Esses estados garantem que o usuario sempre tenha feedback visual claro sobre o que esta acontecendo.
+Implementar os estados de loading (skeletons) e tratamento de erros (toasts) em toda a aplicacao. Inclui skeleton loading para o JSON viewer e relatorio de analise, toasts de erro com mensagens contextuais e retry, e empty state para quando nenhuma URL foi clonada. Esses estados garantem que o usuario sempre tenha feedback visual claro sobre o que esta acontecendo.
 
 ## Acceptance Criteria
 - [ ] Given o JSON esta carregando, When o usuario visualiza a area do viewer, Then deve ver um skeleton loading que simula a estrutura do JSON (linhas de codigo)
 - [ ] Given a analise esta carregando, When o usuario visualiza a area do relatorio, Then deve ver um skeleton loading que simula cards de analise
-- [ ] Given a URL digitada e invalida, When o usuario clica "Espelhar", Then deve ver um toast de erro "URL invalida. Verifique o formato e tente novamente."
+- [ ] Given a URL digitada e invalida, When o usuario clica "Clonar", Then deve ver um toast de erro "URL invalida. Verifique o formato e tente novamente."
 - [ ] Given o site alvo esta inacessivel, When o scraping falha, Then deve ver um toast de erro "Site inacessivel. Verifique se a URL esta correta e o site esta online."
 - [ ] Given a chamada de IA falhou, When o erro retorna, Then deve ver um toast de erro "Falha na analise. Verifique sua API key ou tente novamente." com botao Retry
 - [ ] Given o rate limit foi atingido, When o erro retorna, Then deve ver um toast de erro "Limite de requisicoes atingido. Aguarde alguns minutos."
 - [ ] Given todos os toasts de erro, When exibidos, Then devem ter botao de Retry que re-executa a acao que falhou
-- [ ] Given nenhuma URL foi espelhada ainda, When o usuario esta na pagina de resultados, Then deve ver um empty state com ilustracao e mensagem "Cole uma URL acima para comecar"
+- [ ] Given nenhuma URL foi clonada ainda, When o usuario esta na pagina de resultados, Then deve ver um empty state com ilustracao e mensagem "Cole uma URL acima para comecar"
 
 ## Scope
 ### IN
@@ -65,7 +65,7 @@ Implementar os estados de loading (skeletons) e tratamento de erros (toasts) em 
 - [ ] AnalysisReportSkeleton renderiza com cards simulados
 - [ ] Toasts de erro com mensagens contextuais para cada tipo de erro
 - [ ] Botao Retry funcional em todos os toasts de erro
-- [ ] EmptyState renderiza quando nenhuma URL foi espelhada
+- [ ] EmptyState renderiza quando nenhuma URL foi clonada
 - [ ] Mapeamento de codigos de erro implementado
 - [ ] Skeletons respeitam dark/light mode
 - [ ] Code review aprovado

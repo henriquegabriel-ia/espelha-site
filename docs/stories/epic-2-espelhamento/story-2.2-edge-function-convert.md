@@ -66,7 +66,7 @@ Implementar a Supabase Edge Function `/convert` que recebe um `ScrapedPage` e us
 - Considerar limitar tokens de output para evitar custos excessivos
 
 ## Business Value
-Funcao central do produto: transforma dados brutos em componentes UI renderizaveis. E o "espelhamento" propriamente dito. Qualidade do prompt e validacao determinam a utilidade do output para o usuario final.
+Funcao central do produto: transforma dados brutos em componentes UI renderizaveis. E o "clonagem" propriamente dito. Qualidade do prompt e validacao determinam a utilidade do output para o usuario final.
 
 ## Risks
 - LLM pode gerar JSON invalido ou componentes fora do catalogo -- mitigacao: validacao Zod com rejeicao clara (422)

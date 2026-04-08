@@ -25,7 +25,7 @@ function downloadJson(data: Record<string, unknown>, filename: string) {
 export function ResultActions({
   originalJson,
   optimizedJson,
-  filename = "espelha-site",
+  filename = "clonador-de-sites",
 }: ResultActionsProps) {
   const [copiedOriginal, setCopiedOriginal] = useState(false);
   const [copiedOptimized, setCopiedOptimized] = useState(false);

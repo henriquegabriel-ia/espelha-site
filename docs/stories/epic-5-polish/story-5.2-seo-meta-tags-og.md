@@ -3,14 +3,14 @@
 ## Status: Draft
 
 ## Descricao
-Configurar todas as meta tags necessarias para SEO e compartilhamento social do Espelha Site. Incluir Open Graph, Twitter Cards, favicon e manifest basico. Isso garante que o site apareca bem em buscas e quando compartilhado em redes sociais e mensageiros.
+Configurar todas as meta tags necessarias para SEO e compartilhamento social do Clonador de Sites. Incluir Open Graph, Twitter Cards, favicon e manifest basico. Isso garante que o site apareca bem em buscas e quando compartilhado em redes sociais e mensageiros.
 
 ## Acceptance Criteria
 - [ ] Given o index.html, When inspecionado, Then deve conter title, meta description e meta keywords adequados
 - [ ] Given o link do site compartilhado no WhatsApp/LinkedIn/Twitter, When o preview e gerado, Then deve exibir titulo, descricao e imagem OG corretos
 - [ ] Given as meta tags Open Graph, When presentes, Then devem incluir og:title, og:description, og:image, og:url e og:type
 - [ ] Given as meta tags Twitter, When presentes, Then devem incluir twitter:card, twitter:title, twitter:description e twitter:image
-- [ ] Given o arquivo public/og.png, When verificado, Then deve ter dimensoes 1200x630 e representar visualmente o Espelha Site
+- [ ] Given o arquivo public/og.png, When verificado, Then deve ter dimensoes 1200x630 e representar visualmente o Clonador de Sites
 - [ ] Given o favicon, When a aba do navegador e visualizada, Then o icone deve aparecer corretamente
 - [ ] Given o manifest.json, When presente, Then deve conter name, short_name, icons, theme_color e background_color
 
@@ -39,7 +39,7 @@ Configurar todas as meta tags necessarias para SEO e compartilhamento social do 
 - Testar OG tags com: https://www.opengraph.xyz/ ou Facebook Sharing Debugger
 
 ## Business Value
-- SEO bem configurado garante discoverability organica do Espelha Site em buscas
+- SEO bem configurado garante discoverability organica do Clonador de Sites em buscas
 - OG tags fazem o link compartilhado em WhatsApp/LinkedIn/Twitter ter preview profissional, aumentando cliques
 - Favicon e manifest melhoram percepao de qualidade e profissionalismo
 - Essencial para viralidade: quando usuarios compartilham resultados, o link precisa ter boa aparencia

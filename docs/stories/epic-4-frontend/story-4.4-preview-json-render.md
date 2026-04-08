@@ -3,10 +3,10 @@
 ## Status: Ready
 
 ## Descricao
-Adicionar uma tab [Preview] ao viewer que renderiza o JSON no formato json-render como componentes visuais reais usando @json-render/react. O usuario podera ver uma previa de como o site espelhado ficaria reconstruido a partir do JSON, usando componentes shadcn/ui mapeados ao catalogo json-render. Isso torna o espelhamento tangivel e compreensivel visualmente.
+Adicionar uma tab [Preview] ao viewer que renderiza o JSON no formato json-render como componentes visuais reais usando @json-render/react. O usuario podera ver uma previa de como o site clonado ficaria reconstruido a partir do JSON, usando componentes shadcn/ui mapeados ao catalogo json-render. Isso torna o clonagem tangivel e compreensivel visualmente.
 
 ## Acceptance Criteria
-- [ ] Given o JSON do espelhamento foi retornado, When o usuario clica na tab [Preview], Then deve ver o JSON renderizado como componentes visuais
+- [ ] Given o JSON do clonagem foi retornado, When o usuario clica na tab [Preview], Then deve ver o JSON renderizado como componentes visuais
 - [ ] Given o JSON contem um node do tipo "Section", When renderizado no preview, Then deve exibir uma section estilizada com shadcn/ui
 - [ ] Given o JSON contem nodes do tipo "Heading", "Card", "Text", "Image", "Button", When renderizados, Then cada um deve mapear para o componente shadcn/ui correspondente
 - [ ] Given o JSON e valido json-render, When a renderizacao ocorre, Then o layout deve respeitar a hierarquia e aninhamento dos nodes

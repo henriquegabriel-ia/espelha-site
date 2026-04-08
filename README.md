@@ -1,4 +1,4 @@
-# Espelha Site
+# Clonador de Sites
 
 Converte qualquer URL em dados JSON estruturados usando IA.
 

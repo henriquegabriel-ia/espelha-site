@@ -10,7 +10,7 @@ export interface HistoryEntry {
   analysis?: object;
 }
 
-const STORAGE_KEY = 'espelha-history';
+const STORAGE_KEY = 'clonador-history';
 const MAX_ENTRIES = 10;
 
 function readStorage(): HistoryEntry[] {

@@ -7,7 +7,7 @@ import type { DesignSystem } from "@/types/espelhar";
 export function generateCSS(designSystem: DesignSystem): string {
   const lines: string[] = [];
 
-  lines.push("/* Design System — Gerado por Espelha Site */");
+  lines.push("/* Design System — Gerado por Clonador de Sites */");
   lines.push("");
 
   // ---- :root custom properties ----

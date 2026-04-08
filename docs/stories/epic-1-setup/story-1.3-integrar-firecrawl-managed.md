@@ -38,7 +38,7 @@ Integrar o Firecrawl (managed by Lovable ou via API key) na Edge Function `/scra
 - Rate limiting do Firecrawl: plano free tem limites — tratar erro 429 adequadamente
 
 ## Business Value
-Habilita o core do produto: sem scraping, nao ha espelhamento. Firecrawl managed garante zero-config no remix (NFR-04), essencial para a experiencia de compartilhamento.
+Habilita o core do produto: sem scraping, nao ha clonagem. Firecrawl managed garante zero-config no remix (NFR-04), essencial para a experiencia de compartilhamento.
 
 ## Risks
 - Firecrawl plano free tem rate limit -- mitigacao: tratar erro 429 com mensagem clara ao usuario

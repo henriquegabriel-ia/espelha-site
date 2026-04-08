@@ -3,7 +3,7 @@
 ## Status: Draft
 
 ## Descricao
-Inicializar o projeto base do Espelha Site com a stack definida (React + Vite + TypeScript + Tailwind CSS v4 + shadcn/ui). Criar a estrutura de pastas padrao e configurar ferramentas de qualidade de codigo. Este e o alicerce sobre o qual todas as demais stories serao construidas.
+Inicializar o projeto base do Clonador de Sites com a stack definida (React + Vite + TypeScript + Tailwind CSS v4 + shadcn/ui). Criar a estrutura de pastas padrao e configurar ferramentas de qualidade de codigo. Este e o alicerce sobre o qual todas as demais stories serao construidas.
 
 ## Acceptance Criteria
 - [ ] Given o repositorio vazio, When rodar `npm run dev`, Then o app React inicia sem erros na porta padrao do Vite

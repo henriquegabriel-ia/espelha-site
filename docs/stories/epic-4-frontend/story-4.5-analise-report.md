@@ -3,7 +3,7 @@
 ## Status: Ready
 
 ## Descricao
-Criar o componente AnalysisReport que exibe o resultado da analise feita pela IA sobre o site espelhado. O relatorio e dividido em tres secoes — Positivos, Negativos e Sugestoes — com cards individuais para cada item. As sugestoes incluem badges de impacto e todos os itens sao categorizados (Design, SEO, Conteudo, Estrutura). Isso ajuda o usuario a entender rapidamente o que esta bom, o que precisa melhorar e como melhorar.
+Criar o componente AnalysisReport que exibe o resultado da analise feita pela IA sobre o site clonado. O relatorio e dividido em tres secoes — Positivos, Negativos e Sugestoes — com cards individuais para cada item. As sugestoes incluem badges de impacto e todos os itens sao categorizados (Design, SEO, Conteudo, Estrutura). Isso ajuda o usuario a entender rapidamente o que esta bom, o que precisa melhorar e como melhorar.
 
 ## Acceptance Criteria
 - [ ] Given a analise da IA retornou, When o usuario visualiza o AnalysisReport, Then deve ver 3 secoes distintas: Positivos, Negativos e Sugestoes

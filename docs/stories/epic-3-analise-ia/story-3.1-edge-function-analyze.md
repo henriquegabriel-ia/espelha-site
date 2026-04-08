@@ -3,7 +3,7 @@
 ## Status: Ready
 
 ## Descricao
-Criar a Supabase Edge Function `/analyze` que recebe um JSON (json-render spec) junto com a URL original do site e retorna um relatorio estruturado de analise. A funcao chama um LLM para avaliar o site em 4 dimensoes (Design/UI, SEO, Conteudo, Estrutura Tecnica), retornando pontos positivos, negativos e sugestoes de melhoria categorizadas por impacto. Essa funcao e o alicerce da feature de analise inteligente do Espelha Site, permitindo que o usuario entenda os pontos fortes e fracos do site convertido antes de decidir aplicar otimizacoes.
+Criar a Supabase Edge Function `/analyze` que recebe um JSON (json-render spec) junto com a URL original do site e retorna um relatorio estruturado de analise. A funcao chama um LLM para avaliar o site em 4 dimensoes (Design/UI, SEO, Conteudo, Estrutura Tecnica), retornando pontos positivos, negativos e sugestoes de melhoria categorizadas por impacto. Essa funcao e o alicerce da feature de analise inteligente do Clonador de Sites, permitindo que o usuario entenda os pontos fortes e fracos do site convertido antes de decidir aplicar otimizacoes.
 
 ## Acceptance Criteria
 - [ ] Given um JSON valido (json-render spec) e uma URL, When a Edge Function `/analyze` e chamada via POST, Then retorna status 200 com o relatorio de analise tipado

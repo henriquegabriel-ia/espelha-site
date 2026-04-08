@@ -81,7 +81,7 @@ function App() {
 
   const { history, addToHistory, removeFromHistory, clearHistory } = useHistory();
 
-  // Save to history when espelhamento completes
+  // Save to history when clonagem completes
   const savedUrlRef = useRef<string | null>(null);
   useEffect(() => {
     if (step === 'complete' && jsonRender && lastUrl && lastUrl !== savedUrlRef.current) {
@@ -129,7 +129,7 @@ function App() {
   const features = [
     {
       icon: Link,
-      title: "Espelha",
+      title: "Clona",
       description: "Converte qualquer URL em JSON estruturado",
     },
     {
@@ -155,10 +155,10 @@ function App() {
           <div className="max-w-4xl mx-auto px-4 text-center space-y-6 relative">
             <div className="space-y-3">
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-gradient font-heading leading-[0.92]">
-                Espelha Site
+                Clonador de Sites
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Espelhe qualquer site. Analise. Otimize. Copie.
+                Clone qualquer site. Analise. Otimize. Copie.
               </p>
             </div>
 
@@ -197,7 +197,7 @@ function App() {
               <div className="text-left max-w-lg mx-auto mt-4 space-y-2 text-sm text-muted-foreground">
                 <p className="font-medium text-foreground/80">Como funciona:</p>
                 <ol className="list-decimal list-inside space-y-1">
-                  <li>Cole a URL de qualquer site e clique em <strong className="text-foreground">Espelhar</strong></li>
+                  <li>Cole a URL de qualquer site e clique em <strong className="text-foreground">Clonar</strong></li>
                   <li>A IA converte a estrutura do site em JSON (<span className="font-mono text-xs">json-render</span>)</li>
                   <li>Receba uma análise completa: design, SEO, conteúdo e estrutura</li>
                   <li>Baixe o JSON original ou gere uma versão otimizada com as sugestões da IA</li>

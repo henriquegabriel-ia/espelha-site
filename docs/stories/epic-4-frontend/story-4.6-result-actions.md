@@ -3,7 +3,7 @@
 ## Status: Ready
 
 ## Descricao
-Implementar o componente ResultActions com botoes de acao sobre o resultado do espelhamento: download do JSON original, geracao de versao otimizada com sugestoes da IA, download do JSON otimizado e copia para clipboard. Essas acoes permitem ao usuario extrair valor concreto do espelhamento e levar os resultados para uso externo.
+Implementar o componente ResultActions com botoes de acao sobre o resultado do clonagem: download do JSON original, geracao de versao otimizada com sugestoes da IA, download do JSON otimizado e copia para clipboard. Essas acoes permitem ao usuario extrair valor concreto do clonagem e levar os resultados para uso externo.
 
 ## Acceptance Criteria
 - [ ] Given o JSON original esta disponivel, When o usuario clica "Download Original", Then deve baixar um arquivo .json com nome baseado no dominio (ex: exemplo-com.json)

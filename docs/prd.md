@@ -1,8 +1,8 @@
-# PRD: Espelha Site
+# PRD: Clonador de Sites
 
 ## 1. Visão do Produto
 
-**Espelha Site** é um espelho inteligente de websites. Converte qualquer URL em JSON estruturado (json-render spec), analisa o site com IA e permite gerar uma versão otimizada com melhorias sugeridas. Ferramenta para uso próprio e compartilhamento com clientes. Deploy no Lovable Cloud com remix habilitado.
+**Clonador de Sites** é um clonador inteligente de websites. Converte qualquer URL em JSON estruturado (json-render spec), analisa o site com IA e permite gerar uma versão otimizada com melhorias sugeridas. Ferramenta para uso próprio e compartilhamento com clientes. Deploy no Lovable Cloud com remix habilitado.
 
 ## 2. Público-Alvo
 
@@ -10,14 +10,14 @@
 |---------|------------|
 | **Desenvolvedores** | Extrair estrutura de sites para projetos, automações, pipelines |
 | **Marketing/SEO** | Auditar sites, comparar com concorrentes, identificar melhorias |
-| **Donos de negócio vibecoders** | Espelhar sites que admiram, pegar estrutura e customizar no Lovable/v0 |
+| **Donos de negócio vibecoders** | Clonar sites que admiram, pegar estrutura e customizar no Lovable/v0 |
 
 ## 3. Requisitos Funcionais
 
 ### FR-01: Input de URL
 - Campo para colar URL
 - Validação de formato
-- Botão "Espelhar" como CTA principal
+- Botão "Clonar" como CTA principal
 
 ### FR-02: Scraping (Firecrawl managed)
 - Extração via Firecrawl integrado ao Lovable
@@ -93,7 +93,7 @@
 | 1.3 | Integrar Firecrawl managed | 2 |
 | 1.4 | Setup provider IA com cascata (BYO → Lovable AI → aviso) | 3 |
 
-### Epic 2: Core — Espelhamento
+### Epic 2: Core — Clonagem
 | Story | Descrição | Pontos |
 |-------|-----------|--------|
 | 2.1 | Edge Function /scrape com Firecrawl | 3 |
@@ -129,7 +129,7 @@
 ## 7. Ordem de Desenvolvimento
 
 ```
-Epic 1 (Setup) → Epic 2 (Espelhamento) → Epic 3 (Análise) → Epic 4 (Frontend) → Epic 5 (Polish)
+Epic 1 (Setup) → Epic 2 (Clonagem) → Epic 3 (Análise) → Epic 4 (Frontend) → Epic 5 (Polish)
 ```
 
 ## 8. Fora do Escopo

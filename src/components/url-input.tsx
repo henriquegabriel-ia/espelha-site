@@ -46,7 +46,7 @@ export function UrlInput({ onSubmit, isLoading, disabled }: UrlInputProps) {
         <Input
           type="url"
           placeholder="https://exemplo.com"
-          aria-label="URL do site para espelhar"
+          aria-label="URL do site para clonar"
           value={url}
           onChange={(e) => {
             setUrl(e.target.value);
@@ -66,7 +66,7 @@ export function UrlInput({ onSubmit, isLoading, disabled }: UrlInputProps) {
           ) : (
             <Zap className="h-4 w-4" />
           )}
-          {isLoading ? "Espelhando..." : "Espelhar"}
+          {isLoading ? "Clonando..." : "Clonar"}
         </Button>
       </div>
       {error && (

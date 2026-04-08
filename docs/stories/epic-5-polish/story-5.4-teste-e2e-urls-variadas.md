@@ -3,18 +3,18 @@
 ## Status: Draft
 
 ## Descricao
-Validar o fluxo completo do Espelha Site (URL -> scraping -> JSON -> analise IA -> preview) com pelo menos 10 URLs de diferentes tipos e complexidades. Documentar os resultados, identificar falhas e ajustar prompts ou logica conforme necessario. Esta story e essencial para garantir que o produto funcione de forma confiavel antes do lancamento.
+Validar o fluxo completo do Clonador de Sites (URL -> scraping -> JSON -> analise IA -> preview) com pelo menos 10 URLs de diferentes tipos e complexidades. Documentar os resultados, identificar falhas e ajustar prompts ou logica conforme necessario. Esta story e essencial para garantir que o produto funcione de forma confiavel antes do lancamento.
 
 ## Acceptance Criteria
 - [ ] Given pelo menos 10 URLs diferentes, When processadas pelo fluxo completo, Then os resultados devem ser documentados em uma tabela com: URL, tipo, status (sucesso/falha), tempo total, observacoes
-- [ ] Given um site estatico simples, When espelhado, Then o JSON e a analise devem ser gerados com sucesso
-- [ ] Given uma landing page com muitos componentes, When espelhada, Then todos os componentes principais devem ser capturados no JSON
-- [ ] Given um blog/artigo, When espelhado, Then o conteudo textual deve ser preservado na estrutura JSON
-- [ ] Given um e-commerce (pagina de produto), When espelhado, Then imagens, preco e descricao devem aparecer no JSON
-- [ ] Given uma SPA (React/Vue), When espelhada, Then o conteudo renderizado deve ser capturado (nao apenas o shell vazio)
-- [ ] Given um site em portugues e um em ingles, When espelhados, Then ambos devem ser processados corretamente
-- [ ] Given um site com muitas imagens, When espelhado, Then as URLs das imagens devem ser preservadas no JSON
-- [ ] Given um site minimalista, When espelhado, Then o JSON deve refletir a simplicidade sem inventar componentes
+- [ ] Given um site estatico simples, When clonado, Then o JSON e a analise devem ser gerados com sucesso
+- [ ] Given uma landing page com muitos componentes, When clonada, Then todos os componentes principais devem ser capturados no JSON
+- [ ] Given um blog/artigo, When clonado, Then o conteudo textual deve ser preservado na estrutura JSON
+- [ ] Given um e-commerce (pagina de produto), When clonado, Then imagens, preco e descricao devem aparecer no JSON
+- [ ] Given uma SPA (React/Vue), When clonada, Then o conteudo renderizado deve ser capturado (nao apenas o shell vazio)
+- [ ] Given um site em portugues e um em ingles, When clonados, Then ambos devem ser processados corretamente
+- [ ] Given um site com muitas imagens, When clonado, Then as URLs das imagens devem ser preservadas no JSON
+- [ ] Given um site minimalista, When clonado, Then o JSON deve refletir a simplicidade sem inventar componentes
 - [ ] Given um site com problemas de SEO/design, When analisado pela IA, Then a analise deve identificar os problemas reais
 - [ ] Given os resultados dos testes, When problemas sao encontrados, Then os prompts de IA ou logica de scraping devem ser ajustados e retestados
 

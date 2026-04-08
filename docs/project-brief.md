@@ -1,8 +1,8 @@
-# Project Brief: Espelha Site
+# Project Brief: Clonador de Sites
 
 ## Visão Geral
 
-**Espelha Site** é um espelho inteligente de websites. O usuário cola uma URL, o sistema scrapa a página, converte em JSON estruturado (spec json-render) e a IA analisa o site gerando um relatório com pontos positivos, negativos e sugestões de otimização. O usuário pode baixar o JSON original ou gerar uma versão otimizada com as sugestões da IA aplicadas.
+**Clonador de Sites** é um clonador inteligente de websites. O usuário cola uma URL, o sistema scrapa a página, converte em JSON estruturado (spec json-render) e a IA analisa o site gerando um relatório com pontos positivos, negativos e sugestões de otimização. O usuário pode baixar o JSON original ou gerar uma versão otimizada com as sugestões da IA aplicadas.
 
 ## Problema
 
@@ -27,7 +27,7 @@ Uma ferramenta web que:
 |---------|------------|
 | **Desenvolvedores** | Extrair estrutura de sites para projetos, automações, pipelines |
 | **Marketing/SEO** | Auditar sites, comparar com concorrentes, identificar melhorias |
-| **Donos de negócio vibecoders** | Espelhar sites que admiram, pegar estrutura e customizar no Lovable/v0 |
+| **Donos de negócio vibecoders** | Clonar sites que admiram, pegar estrutura e customizar no Lovable/v0 |
 
 ## Referência de Mercado
 
@@ -49,7 +49,7 @@ Uma ferramenta web que:
 ## Fluxo do Usuário
 
 ```
-1. Cola URL → clica "Espelhar"
+1. Cola URL → clica "Clonar"
 2. Sistema scrapa e converte → mostra JSON original + preview
 3. IA analisa → mostra relatório (positivos, negativos, sugestões)
 4. Usuário escolhe:

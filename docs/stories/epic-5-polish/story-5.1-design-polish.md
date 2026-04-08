@@ -3,7 +3,7 @@
 ## Status: Draft
 
 ## Descricao
-Revisar e polir toda a interface visual do Espelha Site antes do lancamento. Garantir que o dark mode funcione corretamente em todos os componentes, adicionar animacoes sutis que melhorem a experiencia do usuario, e validar responsividade em diferentes tamanhos de tela. O objetivo e entregar uma experiencia visual coesa e profissional.
+Revisar e polir toda a interface visual do Clonador de Sites antes do lancamento. Garantir que o dark mode funcione corretamente em todos os componentes, adicionar animacoes sutis que melhorem a experiencia do usuario, e validar responsividade em diferentes tamanhos de tela. O objetivo e entregar uma experiencia visual coesa e profissional.
 
 ## Acceptance Criteria
 - [ ] Given qualquer componente da aplicacao, When renderizado em dark mode, Then todas as cores, bordas e sombras devem estar consistentes com o tema escuro (sem elementos "brancos" perdidos)

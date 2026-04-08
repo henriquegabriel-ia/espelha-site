@@ -3,7 +3,7 @@
 ## Status: Draft
 
 ## Descricao
-Implementar a Supabase Edge Function `/scrape` que recebe uma URL, valida o input, chama a Firecrawl API para fazer o scraping da pagina e retorna os dados estruturados no tipo `ScrapedPage`. Essa funcao e o ponto de entrada do pipeline de espelhamento -- sem ela nenhuma conversao acontece.
+Implementar a Supabase Edge Function `/scrape` que recebe uma URL, valida o input, chama a Firecrawl API para fazer o scraping da pagina e retorna os dados estruturados no tipo `ScrapedPage`. Essa funcao e o ponto de entrada do pipeline de clonagem -- sem ela nenhuma conversao acontece.
 
 ## Acceptance Criteria
 - [ ] Given uma URL valida, When POST /scrape e chamado, Then a Firecrawl API e invocada e os dados da pagina sao retornados como `ScrapedPage`
@@ -55,7 +55,7 @@ Implementar a Supabase Edge Function `/scrape` que recebe uma URL, valida o inpu
 - Timeout da Firecrawl: usar AbortController com 30s
 
 ## Business Value
-Ponto de entrada do pipeline de espelhamento. Sem esta funcao, o produto nao tem funcionalidade core. Qualidade do scraping impacta diretamente a qualidade da conversao IA downstream.
+Ponto de entrada do pipeline de clonagem. Sem esta funcao, o produto nao tem funcionalidade core. Qualidade do scraping impacta diretamente a qualidade da conversao IA downstream.
 
 ## Risks
 - SSRF: URLs maliciosas podem tentar acessar rede interna -- mitigacao: validacao de IP privado antes de chamar Firecrawl

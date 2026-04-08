@@ -3,10 +3,10 @@
 ## Status: Ready
 
 ## Descricao
-Criar o componente JsonViewer com duas visualizacoes: uma aba JSON com syntax highlight e line numbers, e uma aba Tree com navegacao collapsible dos nodes. O viewer e a principal interface para o usuario inspecionar o resultado do espelhamento em formato json-render. Deve suportar busca dentro do JSON e usar fonte monospacada (JetBrains Mono).
+Criar o componente JsonViewer com duas visualizacoes: uma aba JSON com syntax highlight e line numbers, e uma aba Tree com navegacao collapsible dos nodes. O viewer e a principal interface para o usuario inspecionar o resultado do clonagem em formato json-render. Deve suportar busca dentro do JSON e usar fonte monospacada (JetBrains Mono).
 
 ## Acceptance Criteria
-- [ ] Given o JSON do espelhamento foi retornado, When o usuario visualiza o JsonViewer, Then deve ver duas tabs: [JSON] e [Tree]
+- [ ] Given o JSON do clonagem foi retornado, When o usuario visualiza o JsonViewer, Then deve ver duas tabs: [JSON] e [Tree]
 - [ ] Given a tab JSON esta ativa, When o usuario visualiza o conteudo, Then deve ver o JSON formatado com syntax highlight (keys, strings, numbers, booleans em cores distintas) e line numbers
 - [ ] Given a tab JSON esta ativa, When o JSON e maior que a area visivel, Then deve haver scroll vertical com line numbers acompanhando
 - [ ] Given a tab Tree esta ativa, When o usuario visualiza o conteudo, Then deve ver os nodes do JSON em formato arvore collapsible
@@ -41,7 +41,7 @@ Criar o componente JsonViewer com duas visualizacoes: uma aba JSON com syntax hi
 
 ## Dependencies
 - Story 4.1 (layout base)
-- Dados JSON vindos do fluxo de espelhamento (Epic 2/3)
+- Dados JSON vindos do fluxo de clonagem (Epic 2/3)
 - Fonte JetBrains Mono carregada no projeto
 
 ## Risks

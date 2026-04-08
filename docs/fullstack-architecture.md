@@ -1,4 +1,4 @@
-# Fullstack Architecture: Espelha Site
+# Fullstack Architecture: Clonador de Sites
 
 ## 1. Visão Geral
 
@@ -35,7 +35,7 @@
 | **Output Spec** | json-render (Vercel Labs) | Catálogo de componentes no frontend |
 | **Database** | Supabase PostgreSQL (futuro) | Disponível se precisar de histórico |
 | **Deploy** | Lovable Cloud | Remix habilitado |
-| **Repo** | GitHub (henriquegabriel-ia/espelha-site) | Lovable sincroniza com GitHub |
+| **Repo** | GitHub (henriquegabriel-ia/clonador-de-sites) | Lovable sincroniza com GitHub |
 
 ## 3. Cascata de IA — Prioridade de Providers
 
@@ -83,13 +83,13 @@ function resolveProvider(headers: Headers) {
 ## 4. Estrutura do Projeto
 
 ```
-espelha-site/
+clonador-de-sites/
 ├── src/
 │   ├── App.tsx                    # Router principal
 │   ├── main.tsx                   # Entry point
 │   ├── components/
 │   │   ├── ui/                    # shadcn/ui (Button, Card, Input, Tabs, etc.)
-│   │   ├── url-input.tsx          # Input de URL + botão "Espelhar"
+│   │   ├── url-input.tsx          # Input de URL + botão "Clonar"
 │   │   ├── provider-select.tsx    # Seleção de provider IA + BYO key
 │   │   ├── json-viewer.tsx        # JSON com syntax highlight + tree view
 │   │   ├── json-render-preview.tsx # Preview visual dos componentes
@@ -127,7 +127,7 @@ espelha-site/
 ## 5. Fluxo Principal
 
 ```
-1. User cola URL → clica "Espelhar"
+1. User cola URL → clica "Clonar"
    └── Validação client-side (formato URL)
 
 2. Frontend chama Edge Function /scrape

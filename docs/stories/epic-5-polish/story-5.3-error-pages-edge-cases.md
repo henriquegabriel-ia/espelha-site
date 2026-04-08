@@ -3,7 +3,7 @@
 ## Status: InProgress
 
 ## Descricao
-Tratar todos os cenarios de erro e edge cases que podem ocorrer durante o fluxo de espelhamento. O usuario deve sempre receber feedback claro e acionavel quando algo da errado, seja na entrada de dados, no scraping ou na analise por IA. Erros silenciosos ou mensagens genericas prejudicam a experiencia.
+Tratar todos os cenarios de erro e edge cases que podem ocorrer durante o fluxo de clonagem. O usuario deve sempre receber feedback claro e acionavel quando algo da errado, seja na entrada de dados, no scraping ou na analise por IA. Erros silenciosos ou mensagens genericas prejudicam a experiencia.
 
 ## Acceptance Criteria
 - [x] Given uma URL com caracteres especiais (acentos, espacos, unicode), When submetida, Then deve ser sanitizada/encodada corretamente ou exibir mensagem de erro clara

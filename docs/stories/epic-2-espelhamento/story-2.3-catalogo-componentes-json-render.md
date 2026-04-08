@@ -67,7 +67,7 @@ Fonte da verdade para todo o pipeline de conversao. Garante que a IA so gera com
 
 ## Risks
 - Spec json-render do Vercel Labs pode mudar -- mitigacao: fixar versao da spec usada, documentar no codigo
-- Catalogo muito restritivo pode limitar qualidade do espelhamento -- mitigacao: 13 componentes cobrem maioria dos sites, extensivel no futuro
+- Catalogo muito restritivo pode limitar qualidade do clonagem -- mitigacao: 13 componentes cobrem maioria dos sites, extensivel no futuro
 - Validacao Zod muito rigorosa pode rejeitar outputs validos -- mitigacao: usar `.passthrough()` em props opcionais, testar com outputs reais
 - `z.discriminatedUnion` pode ter limitacoes com tipos complexos -- mitigacao: considerar mapeamento manual por type
 

@@ -38,13 +38,13 @@ export function HistoryPanel({ history, onSelect, onRemove, onClear }: HistoryPa
     return (
       <div className="text-center py-8">
         <Clock className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground">Nenhum espelhamento recente</p>
+        <p className="text-sm text-muted-foreground">Nenhuma clonagem recente</p>
       </div>
     );
   }
 
   function handleClear() {
-    if (window.confirm('Limpar todo o histórico de espelhamentos?')) {
+    if (window.confirm('Limpar todo o histórico de clonagens?')) {
       onClear();
     }
   }
