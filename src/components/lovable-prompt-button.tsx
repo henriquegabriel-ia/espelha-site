@@ -22,6 +22,7 @@ interface LovablePromptButtonProps {
   improvements?: Array<{ category: string; description: string; impact: string }>;
   html?: string;
   label?: string;
+  className?: string;
 }
 
 export function LovablePromptButton({
@@ -31,6 +32,7 @@ export function LovablePromptButton({
   improvements,
   html,
   label,
+  className,
 }: LovablePromptButtonProps) {
   const [copied, setCopied] = useState(false);
 
@@ -75,10 +77,10 @@ export function LovablePromptButton({
     <Sheet>
       <SheetTrigger asChild>
         <Button
-          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md"
-          size="sm"
+          className={`bg-primary hover:bg-primary/90 text-primary-foreground shadow-md ${className ?? ""}`}
+          size="lg"
         >
-          <Sparkles className="mr-2 h-4 w-4" />
+          <Sparkles className="mr-2 h-5 w-5" />
           {label ?? "Gerar prompt para Lovable"}
         </Button>
       </SheetTrigger>

@@ -277,18 +277,10 @@ function App() {
 
               {/* Result Actions */}
               {hasResults && (
-                <>
-                  <ResultActions
-                    originalJson={jsonRender as unknown as Record<string, unknown>}
-                    optimizedJson={hasOptimized ? (optimizedJson as unknown as Record<string, unknown>) : undefined}
-                  />
-                  <LovablePromptButton
-                    jsonRender={jsonRender}
-                    designSystem={designSystem}
-                    originalUrl={lastUrl ?? ""}
-                    html={scrapedData?.html}
-                  />
-                </>
+                <ResultActions
+                  originalJson={jsonRender as unknown as Record<string, unknown>}
+                  optimizedJson={hasOptimized ? (optimizedJson as unknown as Record<string, unknown>) : undefined}
+                />
               )}
             </div>
           </section>
@@ -310,6 +302,21 @@ function App() {
             <div className="max-w-4xl mx-auto px-4 space-y-4">
               <h2 className="text-2xl font-bold text-foreground font-heading">CSS</h2>
               <CssViewer css={generateCSS(designSystem!)} />
+            </div>
+          </section>
+        )}
+
+        {/* Gerar prompt para Lovable — destaque central */}
+        {hasResults && (
+          <section className="pb-8 animate-fade-in">
+            <div className="max-w-4xl mx-auto px-4 flex justify-center">
+              <LovablePromptButton
+                jsonRender={jsonRender!}
+                designSystem={designSystem}
+                originalUrl={lastUrl ?? ""}
+                html={scrapedData?.html}
+                className="w-full sm:w-auto px-10 py-4 text-base"
+              />
             </div>
           </section>
         )}
