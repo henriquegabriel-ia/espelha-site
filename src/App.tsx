@@ -22,8 +22,8 @@ import { ResultActions } from "@/components/result-actions";
 import { ProgressStepper } from "@/components/progress-stepper";
 import { DesignSystemView } from "@/components/design-system-view";
 import { CssViewer } from "@/components/css-viewer";
-import { LovablePromptButton } from "@/components/lovable-prompt-button";
 import { HtmlViewer } from "@/components/html-viewer";
+import { PromptButtons } from "@/components/prompt-buttons";
 import { useEspelhar } from "@/hooks/use-espelhar";
 import { generateCSS } from "@/lib/generate-css";
 import { useProvider } from "@/hooks/use-provider";
@@ -306,16 +306,15 @@ function App() {
           </section>
         )}
 
-        {/* Gerar prompt para Lovable — destaque central */}
+        {/* Gerar prompts — destaque central */}
         {hasResults && (
           <section className="pb-8 animate-fade-in">
-            <div className="max-w-4xl mx-auto px-4 flex justify-center">
-              <LovablePromptButton
+            <div className="max-w-4xl mx-auto px-4">
+              <PromptButtons
                 jsonRender={jsonRender!}
                 designSystem={designSystem}
                 originalUrl={lastUrl ?? ""}
                 html={scrapedData?.html}
-                className="w-full sm:w-auto px-10 py-4 text-base"
               />
             </div>
           </section>
@@ -341,7 +340,7 @@ function App() {
                 isOptimizing={false}
               />
               {hasAnalysis && jsonRender && (
-                <LovablePromptButton
+                <PromptButtons
                   jsonRender={jsonRender}
                   designSystem={designSystem}
                   originalUrl={lastUrl ?? ""}
@@ -351,7 +350,6 @@ function App() {
                     description: s.description,
                     impact: s.impact,
                   }))}
-                  label="Gerar prompt com as melhorias"
                 />
               )}
             </div>
