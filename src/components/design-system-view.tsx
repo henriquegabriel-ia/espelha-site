@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Palette, Check, Copy, Type, Ruler, Circle, Layers, Code, Download } from "lucide-react";
+import { Palette, Check, Copy, Type, Ruler, Circle, Layers } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { generateCSS } from "@/lib/generate-css";
 
 // ---------- Types ----------
 
@@ -308,69 +306,7 @@ function ShadowPreview({ values }: { values: string[] }) {
   );
 }
 
-// ---------- Generated CSS Section ----------
-
-function GeneratedCSSSection({ designSystem }: { designSystem: DesignSystem }) {
-  const [copiedCSS, setCopiedCSS] = useState(false);
-  const css = generateCSS(designSystem);
-
-  const handleCopyCSS = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(css);
-    } catch {
-      const textarea = document.createElement("textarea");
-      textarea.value = css;
-      textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-    }
-    setCopiedCSS(true);
-    setTimeout(() => setCopiedCSS(false), 2000);
-  }, [css]);
-
-  const handleDownloadCSS = useCallback(() => {
-    const blob = new Blob([css], { type: "text/css" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "design-system.css";
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [css]);
-
-  return (
-    <section className="space-y-4">
-      <SectionTitle icon={<Code className="h-4 w-4" />}>
-        CSS Gerado
-      </SectionTitle>
-
-      <div className="rounded-lg border border-border bg-card/60 overflow-hidden">
-        <pre className="p-4 font-mono text-xs text-foreground/90 overflow-auto max-h-96">
-          {css}
-        </pre>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" onClick={handleCopyCSS}>
-          {copiedCSS ? (
-            <Check className="mr-2 h-4 w-4 text-green-500" />
-          ) : (
-            <Copy className="mr-2 h-4 w-4" />
-          )}
-          {copiedCSS ? "Copiado!" : "Copiar CSS"}
-        </Button>
-
-        <Button variant="outline" size="sm" onClick={handleDownloadCSS}>
-          <Download className="mr-2 h-4 w-4" />
-          Download CSS
-        </Button>
-      </div>
-    </section>
-  );
-}
+// Generated CSS section moved to standalone CssViewer component in App.tsx
 
 // ---------- Main Component ----------
 
@@ -473,8 +409,7 @@ export function DesignSystemView({
         </section>
       )}
 
-      {/* Section 6: Generated CSS */}
-      <GeneratedCSSSection designSystem={designSystem} />
+      {/* CSS Gerado movido para seção independente no App.tsx */}
     </div>
   );
 }

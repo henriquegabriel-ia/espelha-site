@@ -21,9 +21,11 @@ import { AnalysisReportView } from "@/components/analysis-report";
 import { ResultActions } from "@/components/result-actions";
 import { ProgressStepper } from "@/components/progress-stepper";
 import { DesignSystemView } from "@/components/design-system-view";
+import { CssViewer } from "@/components/css-viewer";
 import { LovablePromptButton } from "@/components/lovable-prompt-button";
 import { HtmlViewer } from "@/components/html-viewer";
 import { useEspelhar } from "@/hooks/use-espelhar";
+import { generateCSS } from "@/lib/generate-css";
 import { useProvider } from "@/hooks/use-provider";
 import { useHistory } from "@/hooks/use-history";
 import { HistoryPanel } from "@/components/history-panel";
@@ -298,6 +300,16 @@ function App() {
             <div className="max-w-4xl mx-auto px-4 space-y-4">
               <h2 className="text-2xl font-bold text-foreground font-heading">HTML</h2>
               <HtmlViewer html={scrapedData.html} />
+            </div>
+          </section>
+        )}
+
+        {/* CSS Gerado */}
+        {hasDesignSystem && (
+          <section className="pb-8 animate-fade-in">
+            <div className="max-w-4xl mx-auto px-4 space-y-4">
+              <h2 className="text-2xl font-bold text-foreground font-heading">CSS</h2>
+              <CssViewer css={generateCSS(designSystem!)} />
             </div>
           </section>
         )}
