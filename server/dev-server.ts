@@ -544,7 +544,7 @@ app.post("/functions/v1/analyze", async (req, res) => {
     }
 
     return res.json({
-      report,
+      ...(report as object),
       meta: {
         provider: llmResponse.provider,
         model: llmResponse.model,

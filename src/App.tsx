@@ -22,6 +22,7 @@ import { ResultActions } from "@/components/result-actions";
 import { ProgressStepper } from "@/components/progress-stepper";
 import { DesignSystemView } from "@/components/design-system-view";
 import { LovablePromptButton } from "@/components/lovable-prompt-button";
+import { HtmlViewer } from "@/components/html-viewer";
 import { useEspelhar } from "@/hooks/use-espelhar";
 import { useProvider } from "@/hooks/use-provider";
 import { useHistory } from "@/hooks/use-history";
@@ -65,13 +66,13 @@ function App() {
   const {
     step,
     lastUrl,
+    scrapedData,
     jsonRender,
     analysis,
     optimizedJson,
     designSystem,
     error,
     espelhar,
-    generateOptimized,
     reset,
     loadFromHistory,
   } = useEspelhar();
@@ -283,6 +284,7 @@ function App() {
                     jsonRender={jsonRender}
                     designSystem={designSystem}
                     originalUrl={lastUrl ?? ""}
+                    html={scrapedData?.html}
                   />
                 </>
               )}
@@ -290,16 +292,12 @@ function App() {
           </section>
         )}
 
-        {/* Analysis Section */}
-        {(hasAnalysis || step === "analyzing") && (
-          <section className="pb-8 animate-slide-up">
-            <div className="max-w-4xl mx-auto px-4">
-              <AnalysisReportView
-                report={analysis}
-                isLoading={step === "analyzing"}
-                onGenerateOptimized={hasAnalysis ? generateOptimized : undefined}
-                isOptimizing={isOptimizing}
-              />
+        {/* HTML do Site */}
+        {hasResults && scrapedData?.html && (
+          <section className="pb-8 animate-fade-in">
+            <div className="max-w-4xl mx-auto px-4 space-y-4">
+              <h2 className="text-2xl font-bold text-foreground font-heading">HTML</h2>
+              <HtmlViewer html={scrapedData.html} />
             </div>
           </section>
         )}
@@ -309,6 +307,34 @@ function App() {
           <section className="pb-8 animate-slide-up">
             <div className="max-w-4xl mx-auto px-4">
               <DesignSystemView designSystem={designSystem} />
+            </div>
+          </section>
+        )}
+
+        {/* Analysis Section */}
+        {(hasAnalysis || step === "analyzing") && (
+          <section className="pb-8 animate-slide-up">
+            <div className="max-w-4xl mx-auto px-4 space-y-6">
+              <AnalysisReportView
+                report={analysis}
+                isLoading={step === "analyzing"}
+                onGenerateOptimized={undefined}
+                isOptimizing={false}
+              />
+              {hasAnalysis && jsonRender && (
+                <LovablePromptButton
+                  jsonRender={jsonRender}
+                  designSystem={designSystem}
+                  originalUrl={lastUrl ?? ""}
+                  html={scrapedData?.html}
+                  improvements={analysis?.suggestions?.map((s) => ({
+                    category: s.category,
+                    description: s.description,
+                    impact: s.impact,
+                  }))}
+                  label="Gerar prompt com as melhorias"
+                />
+              )}
             </div>
           </section>
         )}

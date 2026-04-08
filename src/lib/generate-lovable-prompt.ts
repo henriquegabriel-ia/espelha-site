@@ -5,6 +5,8 @@ interface GenerateLovablePromptOptions {
   designSystem: DesignSystem | null;
   css: string;
   originalUrl: string;
+  improvements?: Array<{ category: string; description: string; impact: string }>;
+  html?: string;
 }
 
 /**
@@ -12,7 +14,7 @@ interface GenerateLovablePromptOptions {
  * using React + Tailwind CSS + shadcn/ui.
  */
 export function generateLovablePrompt(options: GenerateLovablePromptOptions): string {
-  const { jsonRender, designSystem, css, originalUrl } = options;
+  const { jsonRender, designSystem, css, originalUrl, improvements, html } = options;
 
   const sections: string[] = [];
 
@@ -88,6 +90,26 @@ export function generateLovablePrompt(options: GenerateLovablePromptOptions): st
     sections.push("```css");
     sections.push(css);
     sections.push("```\n");
+  }
+
+  // Original HTML
+  if (html) {
+    sections.push("## HTML Original do Site");
+    sections.push("Use este HTML como referencia adicional para recriar o site fielmente:\n");
+    const truncatedHtml = html.length > 15000 ? html.slice(0, 15000) + "\n... [truncado]" : html;
+    sections.push("```html");
+    sections.push(truncatedHtml);
+    sections.push("```\n");
+  }
+
+  // Improvements
+  if (improvements && improvements.length > 0) {
+    sections.push("## Melhorias a Aplicar");
+    sections.push("Aplique estas melhorias ao recriar o site:\n");
+    for (const imp of improvements) {
+      sections.push(`- [${imp.category}] ${imp.description} (${imp.impact} impacto)`);
+    }
+    sections.push("");
   }
 
   // Instructions

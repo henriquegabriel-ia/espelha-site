@@ -51,7 +51,7 @@ function JsonSyntaxView({ data }: { data: Record<string, unknown> }) {
   const lines = highlighted.split("\n");
 
   return (
-    <div className="relative overflow-auto rounded-md border border-border bg-card" role="region" aria-label="JSON code viewer">
+    <div className="relative overflow-auto rounded-md border border-border bg-card max-h-48" role="region" aria-label="JSON code viewer">
       <pre className="font-mono text-sm leading-6 p-4">
         <code>
           {lines.map((line, i) => (
@@ -170,7 +170,7 @@ function JsonTreeView({ data }: { data: Record<string, unknown> }) {
   const entries = Object.entries(data);
 
   return (
-    <div className="rounded-md border border-border bg-card p-4 font-mono text-sm overflow-auto">
+    <div className="rounded-md border border-border bg-card p-4 font-mono text-sm overflow-auto max-h-48">
       <div className="flex gap-2 mb-3">
         <button
           type="button"

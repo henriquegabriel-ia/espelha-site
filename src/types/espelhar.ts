@@ -13,6 +13,7 @@ export interface ScrapedPage {
   links: Array<{ href: string; text: string }>;
   images: Array<{ src: string; alt: string }>;
   headings: Array<{ level: number; text: string }>;
+  html?: string;
 }
 
 export interface JsonRenderElement {

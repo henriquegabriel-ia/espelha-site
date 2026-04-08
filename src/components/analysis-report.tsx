@@ -159,7 +159,7 @@ export function AnalysisReportView({
           ) : (
             <>
               <Sparkles />
-              Gerar JSON com Sugestoes
+              Gerar prompt com as melhorias
             </>
           )}
         </Button>

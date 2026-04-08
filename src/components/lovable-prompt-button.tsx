@@ -19,12 +19,18 @@ interface LovablePromptButtonProps {
   jsonRender: JsonRenderOutput;
   designSystem: DesignSystem | null;
   originalUrl: string;
+  improvements?: Array<{ category: string; description: string; impact: string }>;
+  html?: string;
+  label?: string;
 }
 
 export function LovablePromptButton({
   jsonRender,
   designSystem,
   originalUrl,
+  improvements,
+  html,
+  label,
 }: LovablePromptButtonProps) {
   const [copied, setCopied] = useState(false);
 
@@ -34,6 +40,8 @@ export function LovablePromptButton({
     designSystem,
     css,
     originalUrl,
+    improvements,
+    html,
   });
 
   const handleCopy = useCallback(async () => {
@@ -71,7 +79,7 @@ export function LovablePromptButton({
           size="sm"
         >
           <Sparkles className="mr-2 h-4 w-4" />
-          Gerar prompt para Lovable
+          {label ?? "Gerar prompt para Lovable"}
         </Button>
       </SheetTrigger>
 
