@@ -17,8 +17,8 @@ function formatRelativeTime(timestamp: string): string {
   const diffHours = Math.floor(diffMs / 3_600_000);
 
   if (diffMin < 1) return 'agora mesmo';
-  if (diffMin < 60) return `h\u00e1 ${diffMin} minuto${diffMin === 1 ? '' : 's'}`;
-  if (diffHours < 24) return `h\u00e1 ${diffHours} hora${diffHours === 1 ? '' : 's'}`;
+  if (diffMin < 60) return `há ${diffMin} minuto${diffMin === 1 ? '' : 's'}`;
+  if (diffHours < 24) return `há ${diffHours} hora${diffHours === 1 ? '' : 's'}`;
   if (diffHours < 48) return 'ontem';
 
   const d = new Date(timestamp);
@@ -44,7 +44,7 @@ export function HistoryPanel({ history, onSelect, onRemove, onClear }: HistoryPa
   }
 
   function handleClear() {
-    if (window.confirm('Limpar todo o hist\u00f3rico de espelhamentos?')) {
+    if (window.confirm('Limpar todo o histórico de espelhamentos?')) {
       onClear();
     }
   }
@@ -53,7 +53,7 @@ export function HistoryPanel({ history, onSelect, onRemove, onClear }: HistoryPa
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <Clock className="h-5 w-5 text-primary" />
-        <h3 className="text-lg font-semibold text-foreground">Hist\u00f3rico Recente</h3>
+        <h3 className="text-lg font-semibold text-foreground">Histórico Recente</h3>
       </div>
 
       <div className="grid gap-2">
@@ -81,7 +81,7 @@ export function HistoryPanel({ history, onSelect, onRemove, onClear }: HistoryPa
               <span
                 role="button"
                 tabIndex={0}
-                aria-label={`Remover ${extractDomain(entry.url)} do hist\u00f3rico`}
+                aria-label={`Remover ${extractDomain(entry.url)} do histórico`}
                 onClick={(e) => {
                   e.stopPropagation();
                   onRemove(entry.id);
@@ -110,7 +110,7 @@ export function HistoryPanel({ history, onSelect, onRemove, onClear }: HistoryPa
           className="text-xs text-muted-foreground hover:text-destructive"
         >
           <Trash2 className="mr-1.5 h-3 w-3" />
-          Limpar hist\u00f3rico
+          Limpar histórico
         </Button>
       </div>
     </div>
