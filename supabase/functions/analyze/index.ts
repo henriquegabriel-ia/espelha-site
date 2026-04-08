@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
-import { getCorsHeaders, corsHeaders } from "../_shared/cors.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 import { resolveProvider } from "../_shared/ai-cascade.ts";
 import { callLLM } from "../_shared/ai-client.ts";
 
@@ -184,7 +184,7 @@ serve(async (req: Request) => {
     // 6. Return validated report
     return new Response(
       JSON.stringify({
-        report,
+        ...(report as Record<string, unknown>),
         meta: {
           provider: llmResponse.provider,
           model: llmResponse.model,
